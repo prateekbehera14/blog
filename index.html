@@ -15,20 +15,144 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
 
-        .container {
+        /* Header Section */
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        /* About Card */
+        .about-card {
+            max-width: 800px;
+            margin: 0 auto 40px;
             background: white;
             border-radius: 20px;
-            padding: 60px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
-            animation: fadeIn 0.8s ease-in;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .about-card .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .about-card h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .about-card p {
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* Blog Container */
+        .blog-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Blog Card */
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 1.2s ease-in;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .blog-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .blog-card-header .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .blog-card-body {
+            padding: 25px;
+        }
+
+        .blog-card-body h3 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .blog-card-body .date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .blog-card-body p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .blog-card-body .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: #764ba2;
         }
 
         @keyframes fadeIn {
@@ -42,52 +166,126 @@
             }
         }
 
-        h1 {
-            font-size: 3em;
-            color: #667eea;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        .info-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
-
-        .info-card h2 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
-        }
-
-        .info-card p {
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-
-        .emoji {
-            font-size: 2em;
-            margin-bottom: 10px;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Hello World! 👋</h1>
-        <p class="subtitle">Welcome to my corner of the internet</p>
-        
-        <div class="info-card">
-            <div class="emoji">🎓</div>
-            <h2>About Me</h2>
-            <p>I am <strong>Prateek Behera</strong>, a 7th class student at <strong>Phoenix Greens School</strong></p>
+    <!-- Header -->
+    <div class="header">
+        <h1>Prateek's Blog 📝</h1>
+        <p>Exploring Ideas, Learning, and Growing</p>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-card">
+        <div class="emoji">🎓</div>
+        <h2>About Me</h2>
+        <p>Hi! I'm <strong>Prateek Behera</strong>, a 7th class student at <strong>Phoenix Greens School</strong>. Welcome to my blog where I share my thoughts, learnings, and adventures!</p>
+    </div>
+
+    <!-- Blog Posts Container -->
+    <div class="blog-container">
+        <div class="blog-grid">
+            
+            <!-- Blog Card 1 -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <div class="icon">🚀</div>
+                </div>
+                <div class="blog-card-body">
+                    <h3>My First Blog Post</h3>
+                    <span class="date">March 10, 2026</span>
+                    <p>Starting my blogging journey! Excited to share my experiences, learnings, and thoughts with the world. This is just the beginning of something amazing.</p>
+                    <span class="tag">Personal</span>
+                    <span class="tag">Journey</span>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <!-- Blog Card 2 -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <div class="icon">💻</div>
+                </div>
+                <div class="blog-card-body">
+                    <h3>Learning Web Development</h3>
+                    <span class="date">March 8, 2026</span>
+                    <p>Diving into the world of HTML, CSS, and JavaScript. It's fascinating how we can create beautiful websites with just code. Can't wait to build more!</p>
+                    <span class="tag">Coding</span>
+                    <span class="tag">Web Dev</span>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <!-- Blog Card 3 -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <div class="icon">📚</div>
+                </div>
+                <div class="blog-card-body">
+                    <h3>School Adventures</h3>
+                    <span class="date">March 5, 2026</span>
+                    <p>Life at Phoenix Greens School is full of exciting moments. From science experiments to sports day, every day brings something new to learn and explore.</p>
+                    <span class="tag">School</span>
+                    <span class="tag">Life</span>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <!-- Blog Card 4 -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <div class="icon">🎮</div>
+                </div>
+                <div class="blog-card-body">
+                    <h3>My Favorite Hobbies</h3>
+                    <span class="date">March 1, 2026</span>
+                    <p>When I'm not studying, I love gaming, reading, and exploring new technologies. Here's a peek into what keeps me busy during my free time!</p>
+                    <span class="tag">Hobbies</span>
+                    <span class="tag">Fun</span>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <!-- Blog Card 5 -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <div class="icon">🌟</div>
+                </div>
+                <div class="blog-card-body">
+                    <h3>Goals for 2026</h3>
+                    <span class="date">February 28, 2026</span>
+                    <p>Setting my goals for this year - learning new skills, making new friends, and becoming better at everything I do. Dream big, work hard!</p>
+                    <span class="tag">Goals</span>
+                    <span class="tag">Motivation</span>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <!-- Blog Card 6 -->
+            <div class="blog-card">
+                <div class="blog-card-header">
+                    <div class="icon">🎨</div>
+                </div>
+                <div class="blog-card-body">
+                    <h3>Creative Projects</h3>
+                    <span class="date">February 25, 2026</span>
+                    <p>Exploring my creative side through art, design, and building cool projects. Creativity has no limits, and I'm here to prove it!</p>
+                    <span class="tag">Creative</span>
+                    <span class="tag">Projects</span>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </body>
