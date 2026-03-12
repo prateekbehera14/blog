@@ -15,144 +15,369 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
         }
 
-        /* Header Section */
-        .header {
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-brand:hover {
+            color: #764ba2;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu li a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05em;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu li a:hover {
+            color: #667eea;
+        }
+
+        .nav-menu li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu li a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            padding: 10px 25px;
+            border-radius: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #667eea;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
             text-align: center;
             color: white;
-            padding: 40px 20px;
+            padding: 80px 20px 60px;
             animation: fadeIn 0.8s ease-in;
         }
 
-        .header h1 {
-            font-size: 3.5em;
-            margin-bottom: 10px;
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .header p {
-            font-size: 1.3em;
+        .hero p {
+            font-size: 1.4em;
             opacity: 0.9;
+            margin-bottom: 30px;
         }
 
-        /* About Card */
-        .about-card {
-            max-width: 800px;
-            margin: 0 auto 40px;
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            color: #667eea;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* About Section */
+        .about-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        .about-card {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
             text-align: center;
             animation: fadeIn 1s ease-in;
         }
 
         .about-card .emoji {
-            font-size: 3em;
-            margin-bottom: 15px;
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .about-card h2 {
             color: #667eea;
-            font-size: 2em;
-            margin-bottom: 10px;
+            font-size: 2.5em;
+            margin-bottom: 15px;
         }
 
         .about-card p {
             color: #555;
-            font-size: 1.1em;
-            line-height: 1.6;
+            font-size: 1.2em;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        /* Blog Container */
-        .blog-container {
+        /* Blog Section */
+        .blog-section {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 60px 30px;
+        }
+
+        .section-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
         }
 
         /* Blog Card */
         .blog-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 25px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: fadeIn 1.2s ease-in;
-            cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .blog-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         }
 
         .blog-card-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 20px;
+            padding: 50px 20px;
             text-align: center;
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .blog-card-header .icon {
-            font-size: 3em;
+            font-size: 3.5em;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .blog-card-body {
-            padding: 25px;
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .blog-card-body h3 {
             color: #333;
-            font-size: 1.5em;
-            margin-bottom: 10px;
+            font-size: 1.6em;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .blog-card-body .date {
             color: #888;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            display: block;
+            font-size: 0.95em;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .blog-card-body .date::before {
+            content: '📅';
         }
 
         .blog-card-body p {
             color: #555;
-            line-height: 1.6;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-bottom: 20px;
         }
 
-        .blog-card-body .tag {
-            display: inline-block;
-            background: #667eea;
+        .tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 5px 15px;
+            padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.85em;
-            margin-right: 5px;
-            margin-top: 5px;
+            font-weight: 500;
         }
 
         .read-more {
-            display: inline-block;
-            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: #667eea;
             font-weight: 600;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: gap 0.3s ease;
+            font-size: 1.05em;
         }
 
         .read-more:hover {
+            gap: 12px;
             color: #764ba2;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            font-size: 1.1em;
+            opacity: 0.9;
         }
 
         @keyframes fadeIn {
@@ -168,32 +393,86 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header h1 {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.1);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
                 font-size: 2.5em;
             }
-            
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
             .blog-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .about-card {
+                padding: 30px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <h1>Prateek's Blog 📝</h1>
-        <p>Exploring Ideas, Learning, and Growing</p>
-    </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">📝 Prateek's Blog</a>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact" class="nav-cta">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Welcome to My Blog 🚀</h1>
+        <p>Exploring Ideas, Sharing Knowledge, Growing Every Day</p>
+        <div class="hero-buttons">
+            <a href="#blog" class="btn btn-primary">Read My Posts</a>
+            <a href="#about" class="btn btn-secondary">Learn More</a>
+        </div>
+    </section>
 
     <!-- About Section -->
-    <div class="about-card">
-        <div class="emoji">🎓</div>
-        <h2>About Me</h2>
-        <p>Hi! I'm <strong>Prateek Behera</strong>, a 7th class student at <strong>Phoenix Greens School</strong>. Welcome to my blog where I share my thoughts, learnings, and adventures!</p>
-    </div>
+    <section id="about" class="about-section">
+        <div class="about-card">
+            <div class="emoji">🎓</div>
+            <h2>About Me</h2>
+            <p>Hi there! I'm <strong>Prateek Behera</strong>, a passionate 7th-grade student at <strong>Phoenix Greens School</strong>. I created this blog to share my journey of learning, exploring new technologies, and expressing my thoughts on various topics. Join me as I navigate through the exciting world of knowledge and creativity!</p>
+        </div>
+    </section>
 
-    <!-- Blog Posts Container -->
-    <div class="blog-container">
+    <!-- Blog Posts Section -->
+    <section id="blog" class="blog-section">
+        <h2 class="section-title">Latest Blog Posts</h2>
         <div class="blog-grid">
             
             <!-- Blog Card 1 -->
@@ -202,11 +481,13 @@
                     <div class="icon">🚀</div>
                 </div>
                 <div class="blog-card-body">
-                    <h3>My First Blog Post</h3>
+                    <h3>My Blogging Journey Begins</h3>
                     <span class="date">March 10, 2026</span>
-                    <p>Starting my blogging journey! Excited to share my experiences, learnings, and thoughts with the world. This is just the beginning of something amazing.</p>
-                    <span class="tag">Personal</span>
-                    <span class="tag">Journey</span>
+                    <p>Taking my first step into the blogging world! I'm excited to share my experiences, learnings, and thoughts. This is just the beginning of an amazing adventure where I'll document my growth as a student and aspiring developer.</p>
+                    <div class="tags">
+                        <span class="tag">Personal</span>
+                        <span class="tag">Journey</span>
+                    </div>
                     <a href="#" class="read-more">Read More →</a>
                 </div>
             </div>
@@ -219,9 +500,12 @@
                 <div class="blog-card-body">
                     <h3>Learning Web Development</h3>
                     <span class="date">March 8, 2026</span>
-                    <p>Diving into the world of HTML, CSS, and JavaScript. It's fascinating how we can create beautiful websites with just code. Can't wait to build more!</p>
-                    <span class="tag">Coding</span>
-                    <span class="tag">Web Dev</span>
+                    <p>Diving deep into HTML, CSS, and JavaScript. It's incredible how these languages come together to create beautiful, interactive websites. I'll share tips, tricks, and lessons learned along the way!</p>
+                    <div class="tags">
+                        <span class="tag">Coding</span>
+                        <span class="tag">Web Dev</span>
+                        <span class="tag">Tutorial</span>
+                    </div>
                     <a href="#" class="read-more">Read More →</a>
                 </div>
             </div>
@@ -232,11 +516,13 @@
                     <div class="icon">📚</div>
                 </div>
                 <div class="blog-card-body">
-                    <h3>School Adventures</h3>
+                    <h3>School Life Adventures</h3>
                     <span class="date">March 5, 2026</span>
-                    <p>Life at Phoenix Greens School is full of exciting moments. From science experiments to sports day, every day brings something new to learn and explore.</p>
-                    <span class="tag">School</span>
-                    <span class="tag">Life</span>
+                    <p>Life at Phoenix Greens School is full of exciting moments and valuable lessons. From fascinating science experiments to competitive sports days, every experience shapes who I am becoming.</p>
+                    <div class="tags">
+                        <span class="tag">School</span>
+                        <span class="tag">Life</span>
+                    </div>
                     <a href="#" class="read-more">Read More →</a>
                 </div>
             </div>
@@ -247,11 +533,14 @@
                     <div class="icon">🎮</div>
                 </div>
                 <div class="blog-card-body">
-                    <h3>My Favorite Hobbies</h3>
+                    <h3>Hobbies & Interests</h3>
                     <span class="date">March 1, 2026</span>
-                    <p>When I'm not studying, I love gaming, reading, and exploring new technologies. Here's a peek into what keeps me busy during my free time!</p>
-                    <span class="tag">Hobbies</span>
-                    <span class="tag">Fun</span>
+                    <p>Beyond academics, I'm passionate about gaming, reading tech blogs, and exploring new technologies. Discover what keeps me engaged and inspired during my free time!</p>
+                    <div class="tags">
+                        <span class="tag">Hobbies</span>
+                        <span class="tag">Gaming</span>
+                        <span class="tag">Fun</span>
+                    </div>
                     <a href="#" class="read-more">Read More →</a>
                 </div>
             </div>
@@ -262,11 +551,13 @@
                     <div class="icon">🌟</div>
                 </div>
                 <div class="blog-card-body">
-                    <h3>Goals for 2026</h3>
+                    <h3>My 2026 Goals</h3>
                     <span class="date">February 28, 2026</span>
-                    <p>Setting my goals for this year - learning new skills, making new friends, and becoming better at everything I do. Dream big, work hard!</p>
-                    <span class="tag">Goals</span>
-                    <span class="tag">Motivation</span>
+                    <p>Setting ambitious goals for this year - mastering new programming languages, excelling in academics, and building meaningful projects. Dream big, work hard, achieve greatness!</p>
+                    <div class="tags">
+                        <span class="tag">Goals</span>
+                        <span class="tag">Motivation</span>
+                    </div>
                     <a href="#" class="read-more">Read More →</a>
                 </div>
             </div>
@@ -277,16 +568,56 @@
                     <div class="icon">🎨</div>
                 </div>
                 <div class="blog-card-body">
-                    <h3>Creative Projects</h3>
+                    <h3>Creative Projects Showcase</h3>
                     <span class="date">February 25, 2026</span>
-                    <p>Exploring my creative side through art, design, and building cool projects. Creativity has no limits, and I'm here to prove it!</p>
-                    <span class="tag">Creative</span>
-                    <span class="tag">Projects</span>
+                    <p>Exploring creativity through web design, digital art, and innovative coding projects. Join me as I share my creative process and the projects I'm building from scratch.</p>
+                    <div class="tags">
+                        <span class="tag">Creative</span>
+                        <span class="tag">Projects</span>
+                        <span class="tag">Design</span>
+                    </div>
                     <a href="#" class="read-more">Read More →</a>
                 </div>
             </div>
 
         </div>
-    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Prateek's Blog | Made with 💜 by Prateek Behera</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">Phoenix Greens School | 7th Grade Student</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
