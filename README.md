@@ -6,10 +6,19 @@ A modern, responsive blog website showcasing my journey as a 7th-grade student a
 
 - **Modern Design**: Sleek professional gray theme with smooth gradients
 - **Responsive Layout**: Fully optimized for desktop, tablet, and mobile devices
-- **Sticky Navigation Bar**: Easy navigation with Home, About, Blog, and Contact sections
+- **Sticky Navigation Bar**: Easy navigation with Home, About, Achievements, Blog, and Contact sections
+- **Achievements Gallery**: Showcase of academic awards and accomplishments
 - **Blog Cards**: 6 beautifully designed blog post cards with hover animations
 - **Smooth Animations**: Fade-in effects, hover transitions, and smooth scrolling
 - **Mobile-Friendly**: Hamburger menu for seamless mobile navigation
+
+## 🏆 Achievements Highlights
+
+- **Gold Medals**: SOF NSO and IMO (Grades 5 & 6)
+- **Excellence Certificates**: Ei Asset Talent Search (Grades 3, 5, 6)
+- **Special Recognition**: TGES English Certificate (Grade 5)
+- **Sports**: Hyderabad Marathon 5K Run (2025)
+- **Inter-School Competition**: Mathematics Representative (Grade 5)
 
 ## 📚 Blog Topics
 
@@ -27,6 +36,7 @@ A modern, responsive blog website showcasing my journey as a 7th-grade student a
 - Colorful tags for post categorization
 - Interactive hover effects
 - Bouncing emoji animations
+- Achievement cards with photo placeholders
 
 ## 🚀 Getting Started
 

@@ -366,6 +366,88 @@
             color: #34495E;
         }
 
+        /* Achievements Section */
+        .achievements-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 1.4s ease-in;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .achievement-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #2C3E50 0%, #4CA1AF 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .achievement-image .placeholder {
+            font-size: 5em;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .achievement-content {
+            padding: 25px;
+        }
+
+        .achievement-content h3 {
+            color: #2C3E50;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #2C3E50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .achievement-year {
+            color: #7F8C8D;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
         /* Footer */
         .footer {
             background: rgba(0, 0, 0, 0.2);
@@ -429,6 +511,10 @@
             .about-card {
                 padding: 30px 20px;
             }
+
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -440,6 +526,7 @@
             <ul class="nav-menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="#achievements">Achievements</a></li>
                 <li><a href="#blog">Blog</a></li>
                 <li><a href="#contact" class="nav-cta">Contact</a></li>
             </ul>
@@ -467,6 +554,110 @@
             <div class="emoji">🎓</div>
             <h2>About Me</h2>
             <p>Hi there! I'm <strong>Prateek Behera</strong>, a passionate 7th-grade student at <strong>Phoenix Greens School</strong>. I created this blog to share my journey of learning, exploring new technologies, and expressing my thoughts on various topics. Join me as I navigate through the exciting world of knowledge and creativity!</p>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="achievements-section">
+        <h2 class="section-title">🏆 Achievements & Awards</h2>
+        <div class="achievement-grid">
+            
+            <!-- Achievement 1 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">🥇</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Gold Medal</span>
+                    <span class="achievement-year">Grade 6</span>
+                    <h3>SOF National Science Olympiad (NSO) - Gold Medal of Excellence</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 2 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">🥇</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Gold Medal</span>
+                    <span class="achievement-year">Grade 6</span>
+                    <h3>SOF International Mathematics Olympiad (IMO) - Gold Medal of Excellence</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 3 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">🥇</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Gold Medal</span>
+                    <span class="achievement-year">Grade 5</span>
+                    <h3>SOF National Science Olympiad (NSO) - Gold Medal of Excellence</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 4 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">🥇</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Gold Medal</span>
+                    <span class="achievement-year">Grade 5</span>
+                    <h3>SOF International Mathematics Olympiad (IMO) - Gold Medal of Excellence</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 5 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">⭐</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Excellence Certificate</span>
+                    <span class="achievement-year">Grades 3, 5 & 6</span>
+                    <h3>Ei Asset Talent Search Excellence Certificate for Outstanding Academic Performance</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 6 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">📜</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Special Recognition</span>
+                    <span class="achievement-year">Grade 5</span>
+                    <h3>Certificate of Special Recognition in English from TGES</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 7 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">🎯</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Competition</span>
+                    <span class="achievement-year">Grade 5</span>
+                    <h3>Represented Global Edge School in Inter-School Mathematics Competition</h3>
+                </div>
+            </div>
+
+            <!-- Achievement 8 -->
+            <div class="achievement-card">
+                <div class="achievement-image">
+                    <div class="placeholder">🏃</div>
+                </div>
+                <div class="achievement-content">
+                    <span class="achievement-badge">Sports</span>
+                    <span class="achievement-year">2025</span>
+                    <h3>Participated in 5K Run - Hyderabad Marathon</h3>
+                </div>
+            </div>
+
         </div>
     </section>
 
