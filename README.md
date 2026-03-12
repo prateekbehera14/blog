@@ -4,13 +4,14 @@ A modern, responsive blog website showcasing my journey as a 7th-grade student a
 
 ## 🌟 Features
 
-- **Modern Design**: Sleek professional gray theme with smooth gradients
+- **Microsoft-Inspired Design**: Professional dark navy hero section with polished blue-gray theme
+- **Rounded Card Design**: Modern cards with 12px border-radius and elegant shadows
 - **Responsive Layout**: Fully optimized for desktop, tablet, and mobile devices
 - **Sticky Navigation Bar**: Easy navigation with Home, About, Achievements, Blog, and Contact sections
-- **Achievements Gallery**: Showcase of academic awards and accomplishments
-- **Blog Cards**: 6 beautifully designed blog post cards with hover animations
-- **Smooth Animations**: Fade-in effects, hover transitions, and smooth scrolling
-- **Mobile-Friendly**: Hamburger menu for seamless mobile navigation
+- **Achievements Gallery**: 8 achievement cards with golden badges and decorative backgrounds
+- **Blog Cards**: 6 beautifully designed blog post cards with gradient headers and pill-shaped tags
+- **Smooth Animations**: Lift effects on hover, smooth scrolling, and polished transitions
+- **Mobile-Friendly**: Hamburger menu with slide-in animation for seamless mobile navigation
 
 ## 🏆 Achievements Highlights
 
@@ -31,12 +32,14 @@ A modern, responsive blog website showcasing my journey as a 7th-grade student a
 
 ## 🎨 Design Elements
 
-- Professional gray color scheme (#2C3E50, #4CA1AF)
-- Animated gradient card headers
-- Colorful tags for post categorization
-- Interactive hover effects
-- Bouncing emoji animations
-- Achievement cards with photo placeholders
+- **Color Palette**: Dark navy hero (#1b2631, #2c3e50), blue accents (#4a90e2, #63b3ed), professional grays (#5a6c7d, #7f8c8d)
+- **Typography**: Segoe UI font family (Microsoft standard), 600 font-weight for headings
+- **Card Shadows**: Soft 0 2px 8px shadows with 0 12px 24px on hover
+- **Interactive Effects**: 8px translateY lift on hover for cards, smooth 0.3s transitions
+- **Golden Badges**: Gradient badges (#ffc107 → #ff9800) with pill shape (20px border-radius)
+- **Decorative Backgrounds**: Wave and radial gradient effects on card images
+- **Rounded Elements**: Consistent 12px border-radius on all cards, 20px on tags and badges
+- **Grid Layout**: Responsive 3-column grid (desktop) → 2-column (tablet) → 1-column (mobile)
 
 ## 🚀 Getting Started
 
