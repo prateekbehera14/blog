@@ -1,6 +1,8 @@
 # Prateek's Blog 📝
 
-A modern, responsive blog website showcasing my journey as a 7th-grade student at Phoenix Greens School.
+Hi! I'm **Prateek Behera**, a passionate 7th-grade student at **Phoenix Greens School**. I created this blog to share my journey of learning, exploring new technologies, and expressing my thoughts on various topics.
+
+**Live site:** [https://prateekbehera14.github.io/blog](https://prateekbehera14.github.io/blog)
 
 ## 🌟 Features
 
@@ -44,10 +46,6 @@ A modern, responsive blog website showcasing my journey as a 7th-grade student a
 ## 🚀 Getting Started
 
 Simply open `index.html` in your web browser to view the blog.
-
-## 👨‍🎓 About Me
-
-Hi! I'm **Prateek Behera**, a passionate 7th-grade student at **Phoenix Greens School**. I created this blog to share my journey of learning, exploring new technologies, and expressing my thoughts on various topics.
 
 ## 📧 Contact
 

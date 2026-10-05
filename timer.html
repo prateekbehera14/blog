@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Workout Timer</title>
+  <style>
+    :root {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color-scheme: light;
+      color: var(--text);
+      background: var(--background);
+      --text: #08283f;
+      --background: #e4edff;
+      --accent: #0957d8;
+      --on-accent: #fff;
+      --soft: #ccddff;
+      --panel: #f4f7ff;
+      --selected: #a7c8ff;
+      --focus: #083e9c;
+      --muted: #395976;
+      --track: #cbdcff;
+      --border: #9fb8dd;
+      --input: #fff;
+      --disabled: #e5ebf5;
+      --divider: #cbd8ed;
+      --rest-background: #c4e8dd;
+      --rest-text: #124e3c;
+      --warning-background: #fff2d8;
+      --warning-border: #d7b77a;
+      --warning-text: #61420e;
+      --error-background: #fff0ed;
+      --error-border: #dd9b92;
+      --error-text: #85241d;
+    }
+    :root[data-theme="mint"] {
+      --text: #153e36;
+      --background: #e2f3eb;
+      --accent: #17654f;
+      --soft: #c5e6d8;
+      --panel: #f1faf5;
+      --selected: #a6d7c2;
+      --focus: #105440;
+      --muted: #3d6558;
+      --track: #bdddcf;
+      --border: #87b5a1;
+      --disabled: #dcebe3;
+      --divider: #c4ddcf;
+      --rest-background: #dce5b4;
+      --rest-text: #3c4815;
+    }
+    :root[data-theme="sunset"] {
+      --text: #4b2929;
+      --background: #fbe8dd;
+      --accent: #9d3e35;
+      --soft: #f3cdbd;
+      --panel: #fff5ed;
+      --selected: #edb4a2;
+      --focus: #8b332d;
+      --muted: #79514b;
+      --track: #ebc5b6;
+      --border: #c59b89;
+      --disabled: #f0ded3;
+      --divider: #ebcfc0;
+      --rest-background: #e4d8ee;
+      --rest-text: #594068;
+    }
+    :root[data-theme="midnight"] {
+      color-scheme: dark;
+      --text: #e5edff;
+      --background: #111827;
+      --accent: #adc6ff;
+      --on-accent: #152642;
+      --soft: #29374f;
+      --panel: #1b2639;
+      --selected: #384d70;
+      --focus: #c8d9ff;
+      --muted: #b2c1da;
+      --track: #35455f;
+      --border: #697f9f;
+      --input: #152034;
+      --disabled: #263248;
+      --divider: #3b4c66;
+      --rest-background: #244c44;
+      --rest-text: #baefdb;
+      --warning-background: #3c3020;
+      --warning-border: #a88953;
+      --warning-text: #f6d99e;
+      --error-background: #42282d;
+      --error-border: #b87981;
+      --error-text: #ffc6ca;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 280px; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button, input, select, summary { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus); outline-offset: 4px;
+    }
+    button {
+      border: 0; border-radius: 24px; padding: 10px 18px;
+      min-height: 44px; color: inherit; background: var(--soft);
+    }
+    button:hover:not(:disabled) { filter: brightness(.96); }
+    button:disabled { cursor: not-allowed; opacity: .5; }
+    [hidden] { display: none !important; }
+    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 28px; }
+    nav, .tools, .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .home-link {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 10px 16px;
+      border-radius: 24px; color: var(--accent); background: var(--soft);
+      font-weight: 600; text-decoration: none;
+    }
+    .home-link:hover { filter: brightness(.96); }
+    .home-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+    nav button, .tools button { background: transparent; }
+    nav button[aria-pressed="true"] { background: var(--selected); }
+    .tools button { width: 44px; padding: 10px; color: var(--accent); }
+    .tools #theme { width: 124px; margin: 0; border-radius: 24px; font-size: .85rem; }
+    svg { width: 21px; height: 21px; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    main { min-height: calc(100svh - 92px); display: flex; flex-direction: column; padding: 8px 24px 28px; }
+    .stage { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 26px 0; gap: 16px; }
+    .eyebrow { font-size: .78rem; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; margin: 0; }
+    #phase { border-radius: 30px; padding: 8px 18px; background: var(--soft); font-size: .9rem; font-weight: 600; }
+    body[data-phase="rest"] #phase { background: var(--rest-background); color: var(--rest-text); }
+    #display { font-size: clamp(4rem, 14vw, 10rem); font-weight: 350; font-variant-numeric: tabular-nums; letter-spacing: -.055em; line-height: 1.12; white-space: nowrap; }
+    #display.long { font-size: clamp(1.55rem, 7vw, 5.5rem); letter-spacing: -.035em; }
+    #subtext { margin: 0; color: var(--muted); min-height: 24px; }
+    progress { appearance: none; height: 4px; width: min(320px, 80%); border: 0; border-radius: 8px; overflow: hidden; background: var(--track); color: var(--accent); }
+    progress::-webkit-progress-bar { background: var(--track); }
+    progress::-webkit-progress-value { background: var(--accent); }
+    progress::-moz-progress-bar { background: var(--accent); }
+    .shortcuts button { font-size: .85rem; min-height: 38px; padding: 8px 14px; }
+    .configuration { width: min(570px, 100%); margin: 0 auto 20px; }
+    details { border-radius: 20px; background: var(--panel); padding: 16px 20px; }
+    summary { cursor: pointer; font-size: .9rem; font-weight: 600; padding: 4px 0; }
+    fieldset { border: 0; padding: 0; margin: 18px 0 0; min-width: 0; }
+    .fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    label { display: block; font-size: .8rem; font-weight: 600; }
+    input, select { width: 100%; margin-top: 7px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: inherit; padding: 10px 12px; min-height: 44px; }
+    input:disabled, select:disabled { background: var(--disabled); }
+    .hint { color: var(--muted); font-size: .8rem; line-height: 1.5; margin: 12px 0 0; }
+    .presets { border-top: 1px solid var(--divider); margin-top: 18px; padding-top: 16px; }
+    .presets .row { margin-top: 10px; }
+    .grow { flex: 1; min-width: 100px; }
+    .presets button { font-size: .8rem; }
+    #countdown-settings { max-width: 280px; margin: auto; }
+    .actions { width: min(570px, 100%); margin: 0 auto; display: flex; gap: 10px; }
+    #primary { flex: 1; background: var(--accent); color: var(--on-accent); font-weight: 600; min-height: 50px; }
+    #primary svg { margin-right: 8px; width: 16px; }
+    #reset { background: var(--track); }
+    .messages { width: min(570px, 100%); margin: 0 auto; }
+    .message { font-size: .85rem; line-height: 1.45; padding: 12px 16px; background: var(--warning-background); border: 1px solid var(--warning-border); border-radius: 12px; margin: 0 0 12px; color: var(--warning-text); }
+    .error { color: var(--error-text); background: var(--error-background); border-color: var(--error-border); }
+    dialog { width: min(540px, calc(100% - 32px)); max-height: 85svh; border: 0; border-radius: 24px; padding: 28px; background: var(--panel); color: inherit; }
+    dialog::backdrop { background: #08283f66; }
+    dialog h2 { margin-top: 0; }
+    dialog p { font-size: .93rem; line-height: 1.65; }
+    dialog .row { justify-content: flex-end; margin-top: 22px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    @media (max-width: 600px) {
+      header { padding: 14px 12px; flex-wrap: wrap; gap: 8px; }
+      .home-link { padding: 10px 12px; font-size: .85rem; }
+      nav { gap: 2px; }
+      nav button { padding: 10px 12px; font-size: .85rem; }
+      .tools { gap: 0; margin-left: auto; }
+      main { min-height: calc(100svh - 136px); padding: 0 16px 20px; }
+      .stage { padding: 24px 0; }
+      details { padding: 14px; }
+      .fields { gap: 8px; }
+      input { padding: 10px 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body data-phase="work">
+  <header>
+    <a class="home-link" href="index.html" aria-label="Go to home page">Home</a>
+    <nav aria-label="Timer modes">
+      <button type="button" data-mode="workout" aria-pressed="true">Workout</button>
+      <button type="button" data-mode="timer" aria-pressed="false">Timer</button>
+      <button type="button" data-mode="stopwatch" aria-pressed="false">Stopwatch</button>
+    </nav>
+    <div class="tools">
+      <label for="theme" class="sr-only">Color theme</label>
+      <select id="theme" title="Color theme">
+        <option value="sky">Sky</option>
+        <option value="mint">Mint</option>
+        <option value="sunset">Sunset</option>
+        <option value="midnight">Midnight</option>
+      </select>
+      <button id="sound" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute sound">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path id="sound-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path id="sound-cross" d="m15 9 6 6m0-6-6 6" hidden/></svg>
+      </button>
+      <button id="fullscreen" type="button" aria-label="Enter full screen" aria-pressed="false" title="Enter full screen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>
+      </button>
+      <button id="help" type="button" aria-label="Help and sound preview" title="Help and sound preview">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .7-1.5 1-1.5 2.5M12 17h.01"/></svg>
+      </button>
+    </div>
+  </header>
+  <main>
+    <section class="stage" aria-label="Time display">
+      <h1 class="eyebrow" id="mode-title">Make time for movement</h1>
+      <span id="phase">Ready to work</span>
+      <div id="display" role="timer" aria-live="off" aria-label="Remaining time">0:50</div>
+      <progress id="progress" max="1" value="0" aria-label="Session progress"></progress>
+      <p id="subtext">Round 1 of 3 · 3:45 total</p>
+      <div id="shortcuts" class="row shortcuts" hidden aria-label="Add countdown time">
+        <button type="button" data-add="30">+0:30</button>
+        <button type="button" data-add="60">+1:00</button>
+        <button type="button" data-add="300">+5:00</button>
+      </div>
+    </section>
+    <div class="configuration">
+      <details id="workout-settings" open>
+        <summary>Workout plan</summary>
+        <fieldset id="workout-fields">
+          <legend class="sr-only">Workout configuration</legend>
+          <div class="fields">
+            <label>Work (seconds)<input id="work" type="number" min="1" step="1" value="50" inputmode="numeric" aria-describedby="input-message"></label>
+            <label>Rest (seconds)<input id="rest" type="number" min="0" step="1" value="20" inputmode="numeric" aria-describedby="input-message"></label>
+            <label>Rounds<input id="rounds" type="number" min="1" step="1" value="3" inputmode="numeric" aria-describedby="input-message"></label>
+          </div>
+        </fieldset>
+        <p class="hint">Each round is work, a 5-second alarm, then rest (including the final round). Set rest to 0 to skip rest, not the alarm. Reset to edit a started session.</p>
+        <div class="presets">
+          <label for="preset-name">Preset name</label>
+          <div class="row">
+            <input id="preset-name" class="grow" placeholder="e.g. Morning intervals" maxlength="100">
+            <button id="save-preset" type="button">Save preset</button>
+          </div>
+          <label for="preset-select" style="margin-top: 14px">Saved workouts</label>
+          <div class="row">
+            <select id="preset-select" class="grow"><option value="">Choose a preset</option></select>
+            <button id="load-preset" type="button" disabled>Load</button>
+            <button id="delete-preset" type="button" disabled>Delete</button>
+          </div>
+          <p class="hint">Saved in this browser only. Moving the file or clearing browser data may lose presets.</p>
+          <p id="preset-status" class="hint" role="status"></p>
+        </div>
+      </details>
+      <div id="countdown-settings" hidden>
+        <label>Timer (seconds)<input id="duration" type="number" min="1" step="1" value="300" inputmode="numeric" aria-describedby="input-message"></label>
+        <p class="hint">Reset to change the duration.</p>
+      </div>
+    </div>
+    <div class="messages">
+      <p id="input-message" class="message error" role="alert" hidden></p>
+      <p id="storage-message" class="message" role="alert" hidden></p>
+      <p id="theme-message" class="message" role="alert" hidden></p>
+      <p id="audio-message" class="message" role="alert" hidden></p>
+      <p id="screen-message" class="message" role="alert" hidden></p>
+      <p id="wake-message" class="message" role="status" hidden></p>
+    </div>
+    <div class="actions">
+      <button id="primary" type="button">Start workout</button>
+      <button id="reset" type="button">Reset</button>
+    </div>
+    <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+  </main>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <h2 id="help-title">Your time, at your pace.</h2>
+    <p><strong>Workout</strong> repeats your work and rest intervals, including the final rest. <strong>Timer</strong> counts down once. <strong>Stopwatch</strong> counts up. Switching modes pauses the outgoing session; Reset unlocks its settings.</p>
+    <p>Every work interval ends with a 5-second alarm before rest starts. These alarm intervals are included in the plan's total time, even when muted or rest is set to 0. A short tone marks the next work interval. A 5-second alarm also marks timer completion and the end of the final rest; without rest, the last work alarm finishes the session without a duplicate alarm. Sound needs a click to activate. Pause, Mute, Reset, starting again, or switching modes stops the sound immediately.</p>
+    <p><strong>Make it yours.</strong> Choose Sky, Mint, Sunset, or the dark Midnight theme from the top bar. Themes apply to every mode without interrupting your session. Your choice is saved in this browser when local storage is available.</p>
+    <button id="preview" type="button">Preview 5-second alarm</button>
+    <p><strong>Keep this page open and your device awake.</strong> Background tabs can delay alarms. Sleep or browser suspension can prevent on-time sound; elapsed progress is reconciled when execution resumes. Screen wake lock is attempted where supported, but is not guaranteed.</p>
+    <p>This file works offline, without installation. Presets are local to this browser/profile. Direct-file storage varies by browser and may not survive moving the file. No cloud backup is provided. Reloading resets active sessions.</p>
+    <div class="row"><button id="close-help" type="button">Got it</button></div>
+  </dialog>
+  <script>
+    "use strict";
+    const $ = (id) => document.getElementById(id);
+    const STORAGE_KEY = "workout-timer.presets.v1";
+    const THEME_KEY = "workout-timer.theme.v1";
+    const ALARM_SECONDS = 5;
+    const makeState = () => ({ status: "idle", elapsed: 0, startedAt: 0, phaseKey: "" });
+    const states = { workout: makeState(), timer: makeState(), stopwatch: makeState() };
+    let mode = "workout";
+    let workout = { work: 50, rest: 20, rounds: 3 };
+    let duration = 300;
+    let presets = [];
+    let storageWritable = true;
+    let muted = false;
+    let audioContext = null;
+    let audioGeneration = 0;
+    const voices = new Set();
+    let wakeLock = null;
+    let wakePending = false;
+
+    function message(id, text = "") {
+      $(id).textContent = text;
+      $(id).hidden = !text;
+    }
+
+    function applyTheme(theme) {
+      if (!Array.from($("theme").options).some((option) => option.value === theme)) {
+        throw new Error("Unrecognized color theme.");
+      }
+      document.documentElement.dataset.theme = theme;
+      $("theme").value = theme;
+    }
+
+    function loadTheme() {
+      applyTheme("sky");
+      try {
+        const saved = localStorage.getItem(THEME_KEY);
+        if (saved !== null) applyTheme(saved);
+      } catch (error) {
+        message("theme-message", `Saved theme could not be loaded: ${error.message} Using Sky; you can still choose a theme.`);
+      }
+    }
+
+    function integer(value, name, minimum) {
+      if (String(value).trim() === "") throw new Error(`${name} is required.`);
+      const number = Number(value);
+      if (!Number.isSafeInteger(number) || number < minimum) {
+        throw new Error(`${name} must be a whole number of ${minimum} or more.`);
+      }
+      return number;
+    }
+
+    function validMilliseconds(seconds) {
+      if (!Number.isSafeInteger(seconds * 1000)) {
+        throw new Error("The total duration is too large. Use smaller values.");
+      }
+    }
+
+    function validateWorkout(value) {
+      const result = {
+        work: integer(value.work, "Work duration", 1),
+        rest: integer(value.rest, "Rest duration", 0),
+        rounds: integer(value.rounds, "Rounds", 1)
+      };
+      validMilliseconds(workoutCycleSeconds(result) * result.rounds);
+      return result;
+    }
+
+    function workoutCycleSeconds(config) {
+      return config.work + ALARM_SECONDS + config.rest;
+    }
+
+    function totalMilliseconds(currentMode) {
+      if (currentMode === "stopwatch") return Infinity;
+      return currentMode === "timer" ? duration * 1000 : workoutCycleSeconds(workout) * workout.rounds * 1000;
+    }
+
+    function elapsedAt(state, now) {
+      return state.elapsed + (state.status === "running" ? Math.max(0, now - state.startedAt) : 0);
+    }
+
+    function workoutAt(config, elapsed) {
+      const workMs = config.work * 1000;
+      const alarmEnd = workMs + ALARM_SECONDS * 1000;
+      const cycleMs = workoutCycleSeconds(config) * 1000;
+      const total = cycleMs * config.rounds;
+      if (elapsed >= total) return { phase: "done", round: config.rounds, remaining: 0, key: "done" };
+      const roundIndex = Math.floor(elapsed / cycleMs);
+      const offset = elapsed - roundIndex * cycleMs;
+      const phase = offset < workMs ? "work" : offset < alarmEnd ? "alarm" : "rest";
+      return {
+        phase, round: roundIndex + 1,
+        remaining: (phase === "work" ? workMs : phase === "alarm" ? alarmEnd : cycleMs) - offset,
+        key: `${roundIndex}:${phase}`
+      };
+    }
+
+    function formatTime(milliseconds, hundredths = false) {
+      const seconds = hundredths ? Math.floor(Math.max(0, milliseconds) / 1000) : Math.ceil(Math.max(0, milliseconds) / 1000);
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor(seconds / 60) % 60;
+      const remainder = String(seconds % 60).padStart(2, "0");
+      const whole = hours ? `${hours}:${String(minutes).padStart(2, "0")}:${remainder}` : `${minutes}:${remainder}`;
+      return hundredths ? `${whole}.${String(Math.floor(Math.max(0, milliseconds) / 10) % 100).padStart(2, "0")}` : whole;
+    }
+
+    function readConfiguration() {
+      try {
+        if (mode === "workout") {
+          workout = validateWorkout({ work: $("work").value, rest: $("rest").value, rounds: $("rounds").value });
+        } else if (mode === "timer") {
+          const next = integer($("duration").value, "Timer duration", 1);
+          validMilliseconds(next);
+          duration = next;
+        }
+        message("input-message");
+        return true;
+      } catch (error) {
+        message("input-message", error.message);
+        return false;
+      }
+    }
+
+    function silence() {
+      audioGeneration++;
+      for (const voice of voices) {
+        voice.gain.disconnect();
+        voice.oscillator.stop();
+      }
+      voices.clear();
+    }
+
+    async function prepareAudio() {
+      if (muted) return false;
+      try {
+        if (!window.AudioContext) throw new Error("Audio is not supported in this browser.");
+        if (!audioContext) audioContext = new AudioContext();
+        if (audioContext.state !== "running") await audioContext.resume();
+        if (audioContext.state !== "running") throw new Error("The browser has blocked audio.");
+        message("audio-message");
+        return true;
+      } catch (error) {
+        message("audio-message", `Sound unavailable: ${error.message} Use sound preview to retry.`);
+        return false;
+      }
+    }
+
+    function tone(complete, seconds = ALARM_SECONDS) {
+      if (muted) return;
+      if (!audioContext || audioContext.state !== "running") {
+        message("audio-message", "Sound is not active. Use sound preview in Help to enable it.");
+        return;
+      }
+      silence();
+      const notes = complete ? [660, 880, 1100] : [740];
+      const noteDuration = complete ? .5 : .2;
+      const durationSeconds = complete ? seconds : noteDuration;
+      const noteCount = Math.ceil(durationSeconds / noteDuration);
+      const startedAt = audioContext.currentTime;
+      for (let index = 0; index < noteCount; index++) {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const start = startedAt + index * noteDuration;
+        const length = Math.min(noteDuration, durationSeconds - index * noteDuration);
+        oscillator.frequency.value = notes[index % notes.length];
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(.18, start + Math.min(.015, length / 3));
+        gain.gain.exponentialRampToValueAtTime(.001, start + length * .9);
+        gain.gain.linearRampToValueAtTime(0, start + length);
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        const voice = { oscillator, gain };
+        voices.add(voice);
+        oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); voices.delete(voice); };
+        oscillator.start(start);
+        oscillator.stop(start + length);
+      }
+    }
+
+    async function syncWakeLock() {
+      const needed = states[mode].status === "running" && !document.hidden;
+      if (!needed) {
+        if (wakeLock) {
+          const lock = wakeLock;
+          wakeLock = null;
+          try { await lock.release(); }
+          catch (error) { message("wake-message", `Could not release screen wake lock: ${error.message}`); }
+        }
+        return;
+      }
+      if (!navigator.wakeLock) {
+        message("wake-message", "Screen wake lock is unavailable. Keep your device awake manually.");
+        return;
+      }
+      if (wakeLock || wakePending) return;
+      wakePending = true;
+      try {
+        const lock = await navigator.wakeLock.request("screen");
+        wakeLock = lock;
+        lock.addEventListener("release", () => {
+          if (wakeLock === lock) {
+            wakeLock = null;
+            if (states[mode].status === "running") message("wake-message", "Screen wake lock was released. Keep your device awake manually.");
+          }
+        });
+        message("wake-message");
+      } catch (error) {
+        message("wake-message", `Keep your device awake manually. Screen wake lock unavailable: ${error.message}`);
+      } finally {
+        wakePending = false;
+      }
+      if (states[mode].status !== "running" || document.hidden) await syncWakeLock();
+    }
+
+    function reconcile(now) {
+      const state = states[mode];
+      if (state.status !== "running") return;
+      const elapsed = elapsedAt(state, now);
+      if (elapsed >= totalMilliseconds(mode)) {
+        state.elapsed = totalMilliseconds(mode);
+        state.status = "completed";
+        if (mode !== "workout" || workout.rest > 0 || state.phaseKey !== `${workout.rounds - 1}:alarm`) {
+          tone(true);
+        } else silence();
+        $("announcement").textContent = `${mode === "workout" ? "Workout" : "Timer"} complete.`;
+        void syncWakeLock();
+      } else if (mode === "workout") {
+        const current = workoutAt(workout, elapsed);
+        if (current.key !== state.phaseKey) {
+          state.phaseKey = current.key;
+          if (current.phase === "alarm") tone(true, current.remaining / 1000);
+          else if (current.phase === "work") tone(false);
+          else silence();
+          const label = current.phase === "alarm" ? "Work complete. Five-second alarm" : current.phase === "work" ? "Work" : "Rest";
+          $("announcement").textContent = `${label}, round ${current.round} of ${workout.rounds}.`;
+        }
+      }
+    }
+
+    function pause(now) {
+      reconcile(now);
+      const state = states[mode];
+      if (state.status === "running") {
+        state.elapsed = elapsedAt(state, now);
+        state.status = "paused";
+      }
+      silence();
+      void syncWakeLock();
+    }
+
+    function render(now = performance.now()) {
+      const state = states[mode];
+      const elapsed = elapsedAt(state, now);
+      const total = totalMilliseconds(mode);
+      const locked = state.status !== "idle";
+      let phase = "";
+      let subtext = "";
+      let displayed = mode === "stopwatch" ? elapsed : Math.max(0, total - elapsed);
+      if (mode === "workout") {
+        const current = workoutAt(workout, elapsed);
+        displayed = current.remaining;
+        phase = { done: "Workout complete", work: "Work", alarm: "Work complete \u00b7 Alarm", rest: "Rest" }[current.phase];
+        if (state.status === "idle") phase = "Ready to work";
+        subtext = `Round ${current.round} of ${workout.rounds} \u00b7 ${formatTime(Math.max(0, total - elapsed))} ${state.status === "idle" ? "total" : "left"}`;
+        document.body.dataset.phase = current.phase;
+      } else {
+        phase = mode === "timer" ? "Countdown" : "Stopwatch";
+        if (state.status === "completed") phase = "Time is up";
+        subtext = mode === "stopwatch" ? "A little progress, every second." : "One thing at a time.";
+        document.body.dataset.phase = "";
+      }
+      if (state.status === "paused") phase += " \u00b7 Paused";
+      $("phase").textContent = phase;
+      const timeText = formatTime(displayed, mode === "stopwatch");
+      $("display").textContent = timeText;
+      $("display").classList.toggle("long", timeText.length > 8);
+      $("display").setAttribute("aria-label", mode === "stopwatch" ? "Elapsed time" : "Remaining time");
+      $("subtext").textContent = subtext;
+      $("progress").hidden = mode === "stopwatch";
+      $("progress").value = mode === "stopwatch" ? 0 : Math.min(1, elapsed / total);
+      $("workout-fields").disabled = states.workout.status !== "idle";
+      $("duration").disabled = states.timer.status !== "idle";
+      $("shortcuts").hidden = mode !== "timer" || locked;
+      $("workout-settings").hidden = mode !== "workout";
+      $("countdown-settings").hidden = mode !== "timer";
+      $("load-preset").disabled = states.workout.status !== "idle" || $("preset-select").value === "";
+      $("delete-preset").disabled = !storageWritable || $("preset-select").value === "";
+      $("save-preset").disabled = !storageWritable || states.workout.status !== "idle";
+      $("primary").textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Resume" : state.status === "completed" ? "Start again" : `Start ${mode}`;
+      $("mode-title").textContent = { workout: "Make time for movement", timer: "A moment of focus", stopwatch: "Every second counts" }[mode];
+      document.title = `${timeText} - ${mode === "workout" ? "Workout" : mode === "timer" ? "Timer" : "Stopwatch"}`;
+    }
+
+    function reset() {
+      silence();
+      states[mode] = makeState();
+      readConfiguration();
+      $("announcement").textContent = "Reset.";
+      void syncWakeLock();
+      render();
+    }
+
+    function refreshPresets(selected = "") {
+      $("preset-select").replaceChildren(new Option("Choose a preset", ""));
+      presets.forEach((preset, index) => $("preset-select").add(new Option(preset.name, String(index))));
+      $("preset-select").value = selected;
+      render();
+    }
+
+    function loadStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw !== null) {
+          const data = JSON.parse(raw);
+          if (!data || data.version !== 1 || !Array.isArray(data.presets)) throw new Error("Unrecognized preset format.");
+          const names = new Set();
+          presets = data.presets.map((preset) => {
+            if (!preset || typeof preset.name !== "string" || !preset.name.trim() || preset.name !== preset.name.trim() || preset.name.length > 100 || names.has(preset.name)) {
+              throw new Error("A preset has an invalid or duplicate name.");
+            }
+            if (["work", "rest", "rounds"].some((key) => typeof preset[key] !== "number")) throw new Error("A preset has invalid durations.");
+            names.add(preset.name);
+            return { name: preset.name, ...validateWorkout(preset) };
+          });
+        }
+      } catch (error) {
+        storageWritable = false;
+        message("storage-message", `Saved presets could not be read: ${error.message} Saving is disabled to protect existing data. The timer still works; check browser storage and reload.`);
+      }
+      refreshPresets();
+    }
+
+    function persist(next) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, presets: next }));
+        presets = next;
+        message("storage-message");
+        return true;
+      } catch (error) {
+        message("storage-message", `Presets were not saved: ${error.message} Check browser storage permissions or available space.`);
+        return false;
+      }
+    }
+
+    $("theme").addEventListener("change", () => {
+      applyTheme($("theme").value);
+      try {
+        localStorage.setItem(THEME_KEY, $("theme").value);
+        message("theme-message");
+      } catch (error) {
+        message("theme-message", `Theme applied for this session but could not be saved: ${error.message}`);
+      }
+    });
+    $("primary").addEventListener("click", () => {
+      const now = performance.now();
+      const state = states[mode];
+      if (state.status === "running") {
+        pause(now);
+      } else {
+        if (state.status === "completed") reset();
+        if (states[mode].status === "idle" && !readConfiguration()) return;
+        silence();
+        const generation = audioGeneration;
+        const next = states[mode];
+        next.startedAt = now;
+        next.status = "running";
+        if (mode === "workout") {
+          next.phaseKey = workoutAt(workout, next.elapsed).key;
+          $("workout-settings").open = false;
+        }
+        void prepareAudio().then((ready) => {
+          if (!ready || generation !== audioGeneration || mode !== "workout" || states.workout !== next || next.status !== "running") return;
+          const current = workoutAt(workout, elapsedAt(next, performance.now()));
+          if (current.phase === "alarm") tone(true, current.remaining / 1000);
+        });
+        $("announcement").textContent = `${mode} started.`;
+        void syncWakeLock();
+      }
+      render(now);
+    });
+    $("reset").addEventListener("click", reset);
+    document.querySelectorAll("[data-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (mode === button.dataset.mode) return;
+        pause(performance.now());
+        mode = button.dataset.mode;
+        document.querySelectorAll("[data-mode]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        message("input-message");
+        if (states[mode].status === "idle") readConfiguration();
+        $("announcement").textContent = `${button.textContent} mode. Previous session paused.`;
+        render();
+      });
+    });
+    ["work", "rest", "rounds", "duration"].forEach((id) => {
+      $(id).addEventListener("input", () => { readConfiguration(); render(); });
+    });
+    document.querySelectorAll("[data-add]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!readConfiguration()) return;
+        const next = duration + Number(button.dataset.add);
+        try { validMilliseconds(next); }
+        catch (error) { message("input-message", error.message); return; }
+        $("duration").value = String(next);
+        readConfiguration();
+        render();
+      });
+    });
+    $("sound").addEventListener("click", () => {
+      muted = !muted;
+      silence();
+      $("sound").setAttribute("aria-pressed", String(muted));
+      $("sound").setAttribute("aria-label", muted ? "Unmute sound" : "Mute sound");
+      $("sound").title = muted ? "Unmute sound" : "Mute sound";
+      $("sound-waves").toggleAttribute("hidden", muted);
+      $("sound-cross").toggleAttribute("hidden", !muted);
+      $("preview").disabled = muted;
+      if (muted) message("audio-message");
+      else void prepareAudio();
+    });
+    $("preview").addEventListener("click", async () => {
+      silence();
+      const generation = audioGeneration;
+      if (await prepareAudio() && generation === audioGeneration) tone(true);
+    });
+    $("fullscreen").addEventListener("click", async () => {
+      try {
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+        else throw new Error("This browser does not support full screen.");
+        message("screen-message");
+      } catch (error) { message("screen-message", `Full screen unavailable: ${error.message}`); }
+    });
+    document.addEventListener("fullscreenchange", () => {
+      const active = Boolean(document.fullscreenElement);
+      $("fullscreen").setAttribute("aria-pressed", String(active));
+      $("fullscreen").setAttribute("aria-label", active ? "Exit full screen" : "Enter full screen");
+      $("fullscreen").title = active ? "Exit full screen" : "Enter full screen";
+    });
+    $("help").addEventListener("click", () => $("help-dialog").showModal());
+    $("close-help").addEventListener("click", () => $("help-dialog").close());
+    $("help-dialog").addEventListener("close", silence);
+    $("preset-select").addEventListener("change", () => render());
+    $("save-preset").addEventListener("click", () => {
+      $("preset-status").textContent = "";
+      if (!readConfiguration()) return;
+      const name = $("preset-name").value.trim();
+      if (!name || name.length > 100) {
+        message("input-message", "Enter a preset name between 1 and 100 characters.");
+        $("preset-name").focus();
+        return;
+      }
+      const existing = presets.findIndex((preset) => preset.name === name);
+      if (existing !== -1 && !window.confirm(`Replace preset "${name}"?`)) return;
+      const next = presets.slice();
+      const preset = { name, ...workout };
+      if (existing === -1) next.push(preset);
+      else next[existing] = preset;
+      if (persist(next)) {
+        refreshPresets(String(existing === -1 ? next.length - 1 : existing));
+        $("preset-status").textContent = `Saved "${name}" in this browser.`;
+      }
+    });
+    $("load-preset").addEventListener("click", () => {
+      const preset = presets[Number($("preset-select").value)];
+      if (!preset || states.workout.status !== "idle") return;
+      $("work").value = String(preset.work);
+      $("rest").value = String(preset.rest);
+      $("rounds").value = String(preset.rounds);
+      $("preset-name").value = preset.name;
+      readConfiguration();
+      $("preset-status").textContent = `Loaded "${preset.name}".`;
+      render();
+    });
+    $("delete-preset").addEventListener("click", () => {
+      $("preset-status").textContent = "";
+      const index = Number($("preset-select").value);
+      const preset = presets[index];
+      if (!preset || !window.confirm(`Delete preset "${preset.name}"?`)) return;
+      if (persist(presets.filter((_, itemIndex) => itemIndex !== index))) {
+        refreshPresets();
+        $("preset-status").textContent = `Deleted "${preset.name}".`;
+      }
+    });
+    document.addEventListener("visibilitychange", () => {
+      reconcile(performance.now());
+      render();
+      void syncWakeLock();
+    });
+    loadTheme();
+    loadStorage();
+    setInterval(() => {
+      const now = performance.now();
+      reconcile(now);
+      if (states[mode].status !== "idle") render(now);
+    }, 40);
+    render();
+  </script>
+</body>
+</html>
