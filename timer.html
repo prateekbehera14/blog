@@ -25,8 +25,12 @@
       --input: #fff;
       --disabled: #e5ebf5;
       --divider: #cbd8ed;
+      --rest: #1d8a6a;
       --rest-background: #c4e8dd;
       --rest-text: #124e3c;
+      --prepare: #b7791f;
+      --prepare-background: #fbe7c3;
+      --prepare-text: #5c3b07;
       --warning-background: #fff2d8;
       --warning-border: #d7b77a;
       --warning-text: #61420e;
@@ -47,6 +51,7 @@
       --border: #87b5a1;
       --disabled: #dcebe3;
       --divider: #c4ddcf;
+      --rest: #6f7f1c;
       --rest-background: #dce5b4;
       --rest-text: #3c4815;
     }
@@ -63,6 +68,7 @@
       --border: #c59b89;
       --disabled: #f0ded3;
       --divider: #ebcfc0;
+      --rest: #7a5294;
       --rest-background: #e4d8ee;
       --rest-text: #594068;
     }
@@ -82,8 +88,12 @@
       --input: #152034;
       --disabled: #263248;
       --divider: #3b4c66;
+      --rest: #6fd6b3;
       --rest-background: #244c44;
       --rest-text: #baefdb;
+      --prepare: #f2c374;
+      --prepare-background: #4a3a1c;
+      --prepare-text: #f9dfae;
       --warning-background: #3c3020;
       --warning-border: #a88953;
       --warning-text: #f6d99e;
@@ -92,12 +102,31 @@
       --error-text: #ffc6ca;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; min-width: 280px; min-height: 100svh; }
+    :root {
+      --glass: color-mix(in srgb, var(--panel) 72%, transparent);
+      --glow-a: color-mix(in srgb, var(--accent) 24%, transparent);
+      --glow-b: color-mix(in srgb, var(--rest) 22%, transparent);
+      --glow-c: color-mix(in srgb, var(--prepare) 14%, transparent);
+    }
+    :root[data-theme="midnight"] {
+      --glow-a: color-mix(in srgb, var(--accent) 22%, transparent);
+      --glow-b: color-mix(in srgb, var(--rest) 16%, transparent);
+      --glow-c: color-mix(in srgb, #8b5cf6 18%, transparent);
+    }
+    body {
+      margin: 0; min-width: 280px; min-height: 100svh; display: flex; flex-direction: column;
+      background:
+        radial-gradient(60vmax 60vmax at 0% 0%, var(--glow-a), transparent 70%),
+        radial-gradient(55vmax 55vmax at 100% 100%, var(--glow-b), transparent 70%),
+        radial-gradient(40vmax 40vmax at 100% 0%, var(--glow-c), transparent 70%),
+        var(--background);
+      background-attachment: fixed;
+    }
     button, input, select { font: inherit; }
     button { cursor: pointer; }
-    button, input, select, summary { -webkit-tap-highlight-color: transparent; }
-    button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
-      outline: 3px solid var(--focus); outline-offset: 4px;
+    button, input, select { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--focus); outline-offset: 3px;
     }
     button {
       border: 0; border-radius: 24px; padding: 10px 18px;
@@ -106,53 +135,179 @@
     button:hover:not(:disabled) { filter: brightness(.96); }
     button:disabled { cursor: not-allowed; opacity: .5; }
     [hidden] { display: none !important; }
-    header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 28px; }
-    nav, .tools, .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .home-link {
-      display: inline-flex; align-items: center; min-height: 44px; padding: 10px 16px;
-      border-radius: 24px; color: var(--accent); background: var(--soft);
-      font-weight: 600; text-decoration: none;
+    header {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      gap: 16px; padding: 18px 28px;
     }
+    nav, .tools, .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    nav, .tools {
+      padding: 4px; border-radius: 28px; gap: 2px; flex-wrap: nowrap;
+      background: var(--glass); backdrop-filter: blur(12px);
+      box-shadow: 0 1px 2px #08283f14, inset 0 0 0 1px color-mix(in srgb, var(--border) 35%, transparent);
+    }
+    .tools { justify-self: end; }
+    .home-link {
+      justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 10px 18px 10px 14px;
+      border-radius: 28px; color: var(--accent); background: var(--glass); backdrop-filter: blur(12px);
+      box-shadow: 0 1px 2px #08283f14, inset 0 0 0 1px color-mix(in srgb, var(--border) 35%, transparent);
+      font-weight: 650; text-decoration: none;
+    }
+    .home-link svg { width: 18px; height: 18px; }
     .home-link:hover { filter: brightness(.96); }
     .home-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
     nav button, .tools button { background: transparent; }
-    nav button[aria-pressed="true"] { background: var(--selected); }
-    .tools button { width: 44px; padding: 10px; color: var(--accent); }
-    .tools #theme { width: 124px; margin: 0; border-radius: 24px; font-size: .85rem; }
+    nav button { min-height: 40px; padding: 8px 18px; font-weight: 500; }
+    nav button[aria-pressed="true"] { background: var(--selected); font-weight: 650; }
+    .tools button, .theme-picker { width: 40px; min-height: 40px; height: 40px; padding: 0; color: var(--accent); flex: none; }
+    .theme-picker { position: relative; display: inline-flex; align-items: center; justify-content: center; border-radius: 24px; }
+    .theme-picker:hover { background: color-mix(in srgb, var(--soft) 60%, transparent); }
+    .theme-picker:focus-within { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .tools .theme-picker select {
+      position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; margin: 0;
+      opacity: 0; cursor: pointer; border: 0;
+    }
+    .theme-picker select:focus-visible { outline: none; }
     svg { width: 21px; height: 21px; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    main { min-height: calc(100svh - 92px); display: flex; flex-direction: column; padding: 8px 24px 28px; }
-    .stage { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 26px 0; gap: 16px; }
-    .eyebrow { font-size: .78rem; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; margin: 0; }
-    #phase { border-radius: 30px; padding: 8px 18px; background: var(--soft); font-size: .9rem; font-weight: 600; }
+    main {
+      --ring-size: clamp(220px, min(82vw, calc(100svh - 380px)), 500px);
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+      gap: clamp(14px, 2.5svh, 26px); padding: 4px 24px 32px;
+    }
+    .stage { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding: 8px 0 4px; }
+    .eyebrow { font-size: .75rem; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; margin: 0; color: var(--muted); }
+
+    /* Progress ring */
+    .ring {
+      --phase-color: var(--accent);
+      position: relative; width: var(--ring-size); aspect-ratio: 1;
+      container-type: inline-size;
+    }
+    .ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring circle { fill: none; stroke-width: 7; }
+    .ring .track { stroke: var(--track); }
+    .ring .value { stroke: var(--phase-color); stroke-linecap: round; stroke-dasharray: 1 1; transition: stroke .3s; }
+    body[data-phase="rest"] .ring { --phase-color: var(--rest); }
+    body[data-phase="prepare"] .ring { --phase-color: var(--prepare); }
+    .ring-content {
+      position: absolute; inset: 9%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4cqi; border-radius: 50%;
+    }
+    #phase {
+      border-radius: 30px; padding: 6px 16px; background: var(--soft);
+      font-size: clamp(.8rem, 4cqi, 1.1rem); font-weight: 650; letter-spacing: .02em; transition: background .3s, color .3s;
+    }
     body[data-phase="rest"] #phase { background: var(--rest-background); color: var(--rest-text); }
-    #display { font-size: clamp(4rem, 14vw, 10rem); font-weight: 350; font-variant-numeric: tabular-nums; letter-spacing: -.055em; line-height: 1.12; white-space: nowrap; }
-    #display.long { font-size: clamp(1.55rem, 7vw, 5.5rem); letter-spacing: -.035em; }
-    #subtext { margin: 0; color: var(--muted); min-height: 24px; }
-    progress { appearance: none; height: 4px; width: min(320px, 80%); border: 0; border-radius: 8px; overflow: hidden; background: var(--track); color: var(--accent); }
+    body[data-phase="prepare"] #phase { background: var(--prepare-background); color: var(--prepare-text); }
+    #display {
+      font-size: 23cqi; font-weight: 350; font-variant-numeric: tabular-nums;
+      letter-spacing: -.05em; line-height: 1; white-space: nowrap;
+    }
+    #display.medium { font-size: 16cqi; letter-spacing: -.035em; }
+    #display.long { font-size: 11.5cqi; letter-spacing: -.02em; }
+    body[data-status="paused"] #display { opacity: .55; }
+    #round { margin: 0; color: var(--muted); font-size: clamp(.85rem, 4.4cqi, 1.2rem); font-weight: 550; min-height: 1.3em; }
+    .meta {
+      width: min(var(--ring-size), 90%); display: grid; grid-template-columns: 1fr auto; gap: 8px 12px;
+      align-items: center; font-size: .85rem; color: var(--muted);
+    }
+    #next { text-align: left; }
+    #total { text-align: right; font-variant-numeric: tabular-nums; }
+    progress {
+      grid-column: 1 / -1; appearance: none; height: 4px; width: 100%; border: 0;
+      border-radius: 8px; overflow: hidden; background: var(--track); color: var(--accent);
+    }
     progress::-webkit-progress-bar { background: var(--track); }
     progress::-webkit-progress-value { background: var(--accent); }
     progress::-moz-progress-bar { background: var(--accent); }
+    #tagline { margin: 0; color: var(--muted); }
+    .shortcuts { justify-content: center; }
     .shortcuts button { font-size: .85rem; min-height: 38px; padding: 8px 14px; }
-    .configuration { width: min(570px, 100%); margin: 0 auto 20px; }
-    details { border-radius: 20px; background: var(--panel); padding: 16px 20px; }
-    summary { cursor: pointer; font-size: .9rem; font-weight: 600; padding: 4px 0; }
-    fieldset { border: 0; padding: 0; margin: 18px 0 0; min-width: 0; }
+
+    /* Actions */
+    .actions, .chips, .messages { width: min(520px, 100%); margin: 0 auto; }
+    .actions { display: flex; gap: 10px; }
+    #primary { flex: 1; background: var(--accent); color: var(--on-accent); font-weight: 650; min-height: 54px; font-size: 1.05rem; }
+    #reset { background: var(--track); min-width: 96px; }
+
+    /* Settings summary chips */
+    .chips { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 16px;
+      background: var(--glass); backdrop-filter: blur(12px); color: var(--muted); font-size: .85rem; font-weight: 550;
+    }
+    .chip svg { width: 17px; height: 17px; color: var(--accent); }
+
+    /* Settings drawer */
+    dialog.drawer {
+      margin: 0 0 0 auto; padding: 0; width: min(460px, 100%); max-width: 100%;
+      height: 100svh; max-height: 100svh; border-radius: 24px 0 0 24px;
+      box-shadow: -12px 0 40px #08283f33;
+    }
+    dialog.drawer[open] { display: flex; flex-direction: column; animation: drawer-in .28s cubic-bezier(.2, .8, .2, 1); }
+    @keyframes drawer-in { from { transform: translateX(100%); } to { transform: none; } }
+    @keyframes sheet-in { from { transform: translateY(100%); } to { transform: none; } }
+    .drawer-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px 10px 24px; }
+    .drawer-header h2 { margin: 0; font-size: 1.15rem; }
+    .icon-button { width: 44px; padding: 10px; background: transparent; color: var(--accent); }
+    .tabs { display: flex; gap: 2px; margin: 0 20px; padding: 4px; border-radius: 28px; background: var(--background); }
+    .tabs button { flex: 1; min-height: 40px; padding: 8px 12px; background: transparent; font-size: .9rem; font-weight: 500; }
+    .tabs button[aria-selected="true"] { background: var(--selected); font-weight: 650; }
+    .drawer-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 20px 24px 28px; }
+    .drawer-body .message { margin-bottom: 16px; }
+    .drawer-footer { padding: 12px 24px 20px; border-top: 1px solid var(--divider); }
+    .drawer-footer button { width: 100%; background: var(--accent); color: var(--on-accent); font-weight: 650; }
+    @media (max-width: 600px) {
+      dialog.drawer {
+        margin: auto 0 0; width: 100%; height: auto; max-height: 90svh;
+        border-radius: 24px 24px 0 0; box-shadow: 0 -12px 40px #08283f33;
+      }
+      dialog.drawer[open] { animation-name: sheet-in; }
+      .drawer-header { padding: 14px 12px 8px 20px; }
+      .tabs { margin: 0 16px; }
+      .drawer-body { padding: 16px 16px 20px; }
+      .drawer-footer { padding: 10px 16px 16px; }
+    }
+    fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
     .fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .fields.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .section + .section, .presets { border-top: 1px solid var(--divider); margin-top: 18px; padding-top: 16px; }
+    .section-title { margin: 0 0 10px; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
     label { display: block; font-size: .8rem; font-weight: 600; }
     input, select { width: 100%; margin-top: 7px; border-radius: 10px; border: 1px solid var(--border); background: var(--input); color: inherit; padding: 10px 12px; min-height: 44px; }
     input:disabled, select:disabled { background: var(--disabled); }
+    input[type="range"] { padding: 0; border: 0; background: transparent; accent-color: var(--accent); min-height: 44px; margin-top: 0; }
+    output { float: right; color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+    .control-row { display: flex; gap: 8px; margin-top: 7px; }
+    .control-row select { margin-top: 0; flex: 1; min-width: 0; }
+    .control-row button { flex: none; }
+    .toggles { display: grid; gap: 2px; margin-top: 12px; }
+    .toggle {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 10px 0; font-size: .9rem; cursor: pointer;
+    }
+    .toggle:not(:last-child) { border-bottom: 1px solid var(--divider); }
+    .toggle small { display: block; color: var(--muted); font-weight: 400; font-size: .78rem; margin-top: 2px; }
+    input.switch {
+      appearance: none; flex: none; position: relative; width: 46px; height: 28px; min-height: 0;
+      margin: 0; padding: 0; border-radius: 14px; background: var(--track);
+      border: 1px solid var(--border); cursor: pointer; transition: background .15s;
+    }
+    input.switch::after {
+      content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+      border-radius: 50%; background: #fff; box-shadow: 0 1px 3px #0003; transition: left .15s;
+    }
+    input.switch:checked { background: var(--accent); border-color: var(--accent); }
+    input.switch:checked::after { left: 21px; background: var(--on-accent); }
+    input.switch:disabled { opacity: .5; cursor: not-allowed; }
     .hint { color: var(--muted); font-size: .8rem; line-height: 1.5; margin: 12px 0 0; }
-    .presets { border-top: 1px solid var(--divider); margin-top: 18px; padding-top: 16px; }
-    .presets .row { margin-top: 10px; }
-    .grow { flex: 1; min-width: 100px; }
-    .presets button { font-size: .8rem; }
-    #countdown-settings { max-width: 280px; margin: auto; }
-    .actions { width: min(570px, 100%); margin: 0 auto; display: flex; gap: 10px; }
-    #primary { flex: 1; background: var(--accent); color: var(--on-accent); font-weight: 600; min-height: 50px; }
-    #primary svg { margin-right: 8px; width: 16px; }
-    #reset { background: var(--track); }
-    .messages { width: min(570px, 100%); margin: 0 auto; }
+    .presets .row { margin-top: 7px; flex-wrap: nowrap; }
+    .presets .row input, .presets .row select { margin-top: 0; }
+    .presets .row + label { margin-top: 14px; }
+    .grow { flex: 1; min-width: 0; }
+    .presets button { font-size: .8rem; flex: none; }
+
     .message { font-size: .85rem; line-height: 1.45; padding: 12px 16px; background: var(--warning-background); border: 1px solid var(--warning-border); border-radius: 12px; margin: 0 0 12px; color: var(--warning-text); }
+    .messages .message:last-child { margin-bottom: 0; }
     .error { color: var(--error-text); background: var(--error-background); border-color: var(--error-border); }
     dialog { width: min(540px, calc(100% - 32px)); max-height: 85svh; border: 0; border-radius: 24px; padding: 28px; background: var(--panel); color: inherit; }
     dialog::backdrop { background: #08283f66; }
@@ -162,73 +317,69 @@
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     @media (max-width: 760px) {
       header {
-        display: grid; grid-template-columns: auto 1fr; gap: 10px 12px;
-        padding: 14px 16px;
+        grid-template-columns: auto 1fr; gap: 10px 8px;
+        padding: 12px 16px;
       }
-      .home-link { justify-self: start; padding: 10px 14px; font-size: .88rem; }
-      .tools { justify-self: end; flex-wrap: nowrap; gap: 2px; }
-      nav { grid-column: 1 / -1; width: 100%; gap: 4px; }
-      nav button { flex: 1 1 0; padding: 10px 8px; font-size: .88rem; }
-      main { min-height: auto; padding: 0 16px 22px; }
-      .stage { min-height: 42svh; padding: 28px 0 22px; }
-      #display { font-size: clamp(4rem, 22vw, 8rem); }
-      .configuration, .actions, .messages { width: min(100%, 570px); }
+      .home-link { padding: 8px 14px 8px 10px; font-size: .9rem; }
+      nav { grid-column: 1 / -1; grid-row: 2; width: 100%; }
+      nav button { flex: 1 1 0; padding: 8px; font-size: .9rem; }
+      main { padding: 0 16px 24px; --ring-size: clamp(220px, min(84vw, calc(100svh - 400px)), 460px); }
     }
     @media (max-width: 480px) {
-      header { grid-template-columns: 1fr; padding: 12px; }
-      .home-link { grid-row: 1; }
-      .tools {
-        grid-column: 1; grid-row: 2; width: 100%;
-        justify-self: stretch;
-      }
-      .tools #theme { flex: 1; width: auto; min-width: 0; }
-      nav { grid-row: 3; }
-      main { padding: 0 12px 18px; }
-      .stage { min-height: 38svh; padding: 22px 0 18px; gap: 12px; }
-      #display { font-size: clamp(3.6rem, 24vw, 6rem); }
-      #display.long { font-size: clamp(1.45rem, 12vw, 3.2rem); }
-      #subtext { font-size: .9rem; }
-      progress { width: min(280px, 90%); }
-      details { padding: 14px; border-radius: 16px; }
-      .fields { grid-template-columns: 1fr; gap: 12px; }
-      input { padding: 10px; }
-      .presets .row { align-items: stretch; }
+      header { padding: 10px 12px; }
+      .home-link { min-height: 44px; }
+      .home-link span { display: none; }
+      .home-link { padding: 0; width: 48px; justify-content: center; }
+      .tools button, .theme-picker { width: 38px; height: 38px; min-height: 38px; }
+      main { padding: 0 12px 20px; --ring-size: clamp(200px, min(86vw, calc(100svh - 400px)), 420px); }
+      .fields { gap: 8px; }
+      .fields.two { grid-template-columns: 1fr; gap: 12px; }
+      input, select { padding: 10px; }
+      .presets .row { flex-wrap: wrap; }
       .presets .row .grow { flex-basis: 100%; }
       .presets .row button { flex: 1 1 auto; }
-      .actions { flex-wrap: wrap; }
-      #primary { flex-basis: calc(100% - 90px); }
       dialog { padding: 20px; border-radius: 18px; }
     }
     @media (max-width: 340px) {
       nav button { font-size: .78rem; padding-inline: 4px; }
-      .tools button { width: 40px; padding: 8px; }
+      .tools button, .theme-picker { width: 34px; height: 34px; min-height: 34px; }
+      .tools svg { width: 18px; height: 18px; }
+      .fields { grid-template-columns: 1fr; }
       .actions { display: grid; grid-template-columns: 1fr; }
-      #primary, #reset { width: 100%; }
     }
-    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
   </style>
 </head>
-<body data-phase="work">
+<body data-phase="work" data-status="idle">
   <header>
-    <a class="home-link" href="index.html" aria-label="Go to home page">Home</a>
+    <a class="home-link" href="index.html" aria-label="Go to home page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1Z"/></svg>
+      <span>Home</span>
+    </a>
     <nav aria-label="Timer modes">
       <button type="button" data-mode="workout" aria-pressed="true">Workout</button>
       <button type="button" data-mode="timer" aria-pressed="false">Timer</button>
       <button type="button" data-mode="stopwatch" aria-pressed="false">Stopwatch</button>
     </nav>
     <div class="tools">
-      <label for="theme" class="sr-only">Color theme</label>
-      <select id="theme" title="Color theme">
-        <option value="sky">Sky</option>
-        <option value="mint">Mint</option>
-        <option value="sunset">Sunset</option>
-        <option value="midnight">Midnight</option>
-      </select>
+      <span class="theme-picker" title="Color theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.7-.9 1.4-1.8-.4-1.2.3-2.2 1.6-2.2H17a4 4 0 0 0 4-4c0-5.5-4-10-9-10Z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10" cy="7" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></svg>
+        <label for="theme" class="sr-only">Color theme</label>
+        <select id="theme">
+          <option value="sky">Sky</option>
+          <option value="mint">Mint</option>
+          <option value="sunset">Sunset</option>
+          <option value="midnight">Midnight</option>
+        </select>
+      </span>
       <button id="sound" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute sound">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path id="sound-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path id="sound-cross" d="m15 9 6 6m0-6-6 6" hidden/></svg>
       </button>
       <button id="fullscreen" type="button" aria-label="Enter full screen" aria-pressed="false" title="Enter full screen">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>
+      </button>
+      <button id="settings-button" type="button" aria-label="Open settings" aria-haspopup="dialog" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10m4 0h2M4 17h4m4 0h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
       </button>
       <button id="help" type="button" aria-label="Help and sound preview" title="Help and sound preview">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-1 .7-1.5 1-1.5 2.5M12 17h.01"/></svg>
@@ -238,35 +389,91 @@
   <main>
     <section class="stage" aria-label="Time display">
       <h1 class="eyebrow" id="mode-title">Make time for movement</h1>
-      <span id="phase">Ready to work</span>
-      <div id="display" role="timer" aria-live="off" aria-label="Remaining time">0:50</div>
-      <progress id="progress" max="1" value="0" aria-label="Session progress"></progress>
-      <p id="subtext">Round 1 of 3 · 3:45 total</p>
+      <div class="ring">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="track" cx="100" cy="100" r="94"/>
+          <circle id="ring-value" class="value" cx="100" cy="100" r="94" pathLength="1"/>
+        </svg>
+        <div class="ring-content">
+          <span id="phase">Ready</span>
+          <div id="display" role="timer" aria-live="off" aria-label="Remaining time">0:50</div>
+          <p id="round">Round 1 of 3</p>
+        </div>
+      </div>
+      <div id="meta" class="meta">
+        <span id="next"></span>
+        <span id="total"></span>
+        <progress id="progress" max="1" value="0" aria-label="Session progress"></progress>
+      </div>
+      <p id="tagline" hidden></p>
       <div id="shortcuts" class="row shortcuts" hidden aria-label="Add countdown time">
         <button type="button" data-add="30">+0:30</button>
         <button type="button" data-add="60">+1:00</button>
         <button type="button" data-add="300">+5:00</button>
       </div>
     </section>
-    <div class="configuration">
-      <details id="workout-settings" open>
-        <summary>Workout plan</summary>
+    <div class="actions">
+      <button id="primary" type="button">Start workout</button>
+      <button id="reset" type="button">Reset</button>
+    </div>
+    <div id="chips" class="chips" aria-label="Settings">
+      <button id="plan-chip" class="chip" type="button" data-open-tab="plan" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10m4 0h2M4 17h4m4 0h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+        <span id="plan-summary"></span>
+      </button>
+      <button id="alert-chip" class="chip" type="button" data-open-tab="alerts" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4Z"/><path d="M10 21h4"/></svg>
+        <span id="alert-summary"></span>
+      </button>
+    </div>
+    <div class="messages">
+      <p id="storage-message" class="message" role="alert" hidden></p>
+      <p id="theme-message" class="message" role="alert" hidden></p>
+      <p id="audio-message" class="message" role="alert" hidden></p>
+      <p id="screen-message" class="message" role="alert" hidden></p>
+      <p id="wake-message" class="message" role="status" hidden></p>
+    </div>
+    <dialog id="settings" class="drawer" aria-labelledby="settings-title">
+      <div class="drawer-header">
+        <h2 id="settings-title">Settings</h2>
+        <button id="close-settings" class="icon-button" type="button" aria-label="Close settings" title="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Settings sections">
+        <button id="tab-plan" type="button" role="tab" aria-selected="true" aria-controls="panel-plan" data-tab="plan">Workout plan</button>
+        <button id="tab-alerts" type="button" role="tab" aria-selected="false" aria-controls="panel-alerts" data-tab="alerts" tabindex="-1">Alerts &amp; sound</button>
+      </div>
+      <div class="drawer-body">
+      <p id="input-message" class="message error" role="alert" hidden></p>
+      <div id="panel-plan" role="tabpanel" aria-labelledby="tab-plan">
+      <div id="workout-settings">
         <fieldset id="workout-fields">
           <legend class="sr-only">Workout configuration</legend>
           <div class="fields">
-            <label>Work (seconds)<input id="work" type="number" min="1" step="1" value="50" inputmode="numeric" aria-describedby="input-message"></label>
-            <label>Rest (seconds)<input id="rest" type="number" min="0" step="1" value="20" inputmode="numeric" aria-describedby="input-message"></label>
+            <label>Work (sec)<input id="work" type="number" min="1" step="1" value="50" inputmode="numeric" aria-describedby="input-message"></label>
+            <label>Rest (sec)<input id="rest" type="number" min="0" step="1" value="20" inputmode="numeric" aria-describedby="input-message"></label>
             <label>Rounds<input id="rounds" type="number" min="1" step="1" value="3" inputmode="numeric" aria-describedby="input-message"></label>
           </div>
+          <div class="fields two" style="margin-top: 12px">
+            <label>Get ready (sec, 0 = off)<input id="prepare" type="number" min="0" step="1" value="10" inputmode="numeric" aria-describedby="input-message"></label>
+          </div>
+          <div class="toggles">
+            <label class="toggle">
+              <span>Rest after final round<small>Otherwise the workout ends when the last work interval ends.</small></span>
+              <input id="final-rest" class="switch" type="checkbox">
+            </label>
+          </div>
         </fieldset>
-        <p class="hint">Each round is work, a 5-second alarm, then rest (including the final round). Set rest to 0 to skip rest, not the alarm. Reset to edit a started session.</p>
-        <div class="presets">
+        <p class="hint">Reset to edit a started session.</p>
+        <div class="section presets">
+          <h2 class="section-title">Presets</h2>
           <label for="preset-name">Preset name</label>
           <div class="row">
             <input id="preset-name" class="grow" placeholder="e.g. Morning intervals" maxlength="100">
             <button id="save-preset" type="button">Save preset</button>
           </div>
-          <label for="preset-select" style="margin-top: 14px">Saved workouts</label>
+          <label for="preset-select">Saved workouts</label>
           <div class="row">
             <select id="preset-select" class="grow"><option value="">Choose a preset</option></select>
             <button id="load-preset" type="button" disabled>Load</button>
@@ -275,34 +482,87 @@
           <p class="hint">Saved in this browser only. Moving the file or clearing browser data may lose presets.</p>
           <p id="preset-status" class="hint" role="status"></p>
         </div>
-      </details>
+      </div>
       <div id="countdown-settings" hidden>
         <label>Timer (seconds)<input id="duration" type="number" min="1" step="1" value="300" inputmode="numeric" aria-describedby="input-message"></label>
         <p class="hint">Reset to change the duration.</p>
       </div>
-    </div>
-    <div class="messages">
-      <p id="input-message" class="message error" role="alert" hidden></p>
-      <p id="storage-message" class="message" role="alert" hidden></p>
-      <p id="theme-message" class="message" role="alert" hidden></p>
-      <p id="audio-message" class="message" role="alert" hidden></p>
-      <p id="screen-message" class="message" role="alert" hidden></p>
-      <p id="wake-message" class="message" role="status" hidden></p>
-    </div>
-    <div class="actions">
-      <button id="primary" type="button">Start workout</button>
-      <button id="reset" type="button">Reset</button>
-    </div>
+      </div>
+      <div id="panel-alerts" role="tabpanel" aria-labelledby="tab-alerts" hidden>
+      <div id="alert-settings">
+        <div class="section">
+          <div class="fields two">
+            <div>
+              <label for="alert-sound">Sound</label>
+              <div class="control-row">
+                <select id="alert-sound"></select>
+                <button id="test-sound" type="button">Test</button>
+              </div>
+            </div>
+            <label>Volume <output id="volume-value" for="volume">80%</output>
+              <input id="volume" type="range" min="0" max="100" step="5" value="80">
+            </label>
+          </div>
+        </div>
+        <div class="section">
+          <h2 class="section-title">Play an alert when</h2>
+          <div class="toggles" style="margin-top: 0">
+            <label class="toggle workout-only">
+              <span>A round starts<small>When each work interval begins.</small></span>
+              <input id="alert-work" class="switch" type="checkbox" checked>
+            </label>
+            <label class="toggle workout-only">
+              <span>Rest starts<small>When each rest interval begins.</small></span>
+              <input id="alert-rest" class="switch" type="checkbox" checked>
+            </label>
+            <label class="toggle">
+              <span>Time is up<small>When the workout or timer finishes.</small></span>
+              <input id="alert-finish" class="switch" type="checkbox" checked>
+            </label>
+          </div>
+        </div>
+        <div class="section">
+          <div class="fields two">
+            <label>Countdown beeps
+              <select id="alert-countdown">
+                <option value="0">Off</option>
+                <option value="1">Last 1 second</option>
+                <option value="2">Last 2 seconds</option>
+                <option value="3">Last 3 seconds</option>
+                <option value="4">Last 4 seconds</option>
+                <option value="5">Last 5 seconds</option>
+                <option value="10">Last 10 seconds</option>
+              </select>
+            </label>
+            <label>Finish alarm length
+              <select id="alert-finish-seconds">
+                <option value="1">1 second</option>
+                <option value="2">2 seconds</option>
+                <option value="3">3 seconds</option>
+                <option value="5">5 seconds</option>
+                <option value="10">10 seconds</option>
+                <option value="15">15 seconds</option>
+                <option value="30">30 seconds</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint">Alerts play on top of your intervals and never add time. Countdown beeps tick during the last seconds of every interval. Alert settings are saved in this browser and can be changed at any time.</p>
+        </div>
+      </div>
+      </div>
+      </div>
+      <div class="drawer-footer"><button id="done-settings" type="button">Done</button></div>
+    </dialog>
     <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
   </main>
   <dialog id="help-dialog" aria-labelledby="help-title">
     <h2 id="help-title">Your time, at your pace.</h2>
-    <p><strong>Workout</strong> repeats your work and rest intervals, including the final rest. <strong>Timer</strong> counts down once. <strong>Stopwatch</strong> counts up. Switching modes pauses the outgoing session; Reset unlocks its settings.</p>
-    <p>Every work interval ends with a 5-second alarm before rest starts. These alarm intervals are included in the plan's total time, even when muted or rest is set to 0. A short tone marks the next work interval. A 5-second alarm also marks timer completion and the end of the final rest; without rest, the last work alarm finishes the session without a duplicate alarm. Sound needs a click to activate. Pause, Mute, Reset, starting again, or switching modes stops the sound immediately.</p>
+    <p><strong>Workout</strong> runs an optional get-ready countdown, then repeats your work and rest intervals. Rest after the final round is optional. <strong>Timer</strong> counts down once. <strong>Stopwatch</strong> counts up. Switching modes pauses the outgoing session; Reset unlocks its settings.</p>
+    <p><strong>Alerts</strong> overlap your intervals and never add time. Open <strong>Settings</strong> (the sliders button, or the summary chips under Start) to edit the workout plan or timer length and the alerts. Under <em>Alerts &amp; sound</em>, choose the sound and volume, whether a cue plays when a round starts, when rest starts and when time is up, how many countdown beeps play before each interval ends, and how long the finish alarm rings. Sound needs a click to activate. Pause, Mute, Reset, starting again, or switching modes stops the sound immediately.</p>
     <p><strong>Make it yours.</strong> Choose Sky, Mint, Sunset, or the dark Midnight theme from the top bar. Themes apply to every mode without interrupting your session. Your choice is saved in this browser when local storage is available.</p>
-    <button id="preview" type="button">Preview 5-second alarm</button>
+    <button id="preview" type="button">Preview finish alarm</button>
     <p><strong>Keep this page open and your device awake.</strong> Background tabs can delay alarms. Sleep or browser suspension can prevent on-time sound; elapsed progress is reconciled when execution resumes. Screen wake lock is attempted where supported, but is not guaranteed.</p>
-    <p>This file works offline, without installation. Presets are local to this browser/profile. Direct-file storage varies by browser and may not survive moving the file. No cloud backup is provided. Reloading resets active sessions.</p>
+    <p>This file works offline, without installation. Presets and settings are local to this browser/profile. Direct-file storage varies by browser and may not survive moving the file. No cloud backup is provided. Reloading resets active sessions.</p>
     <div class="row"><button id="close-help" type="button">Got it</button></div>
   </dialog>
   <script>
@@ -310,16 +570,59 @@
     const $ = (id) => document.getElementById(id);
     const STORAGE_KEY = "workout-timer.presets.v1";
     const THEME_KEY = "workout-timer.theme.v1";
-    const ALARM_SECONDS = 5;
-    const makeState = () => ({ status: "idle", elapsed: 0, startedAt: 0, phaseKey: "" });
+    const ALERTS_KEY = "workout-timer.alerts.v1";
+    const DEFAULT_PLAN = { work: 50, rest: 20, rounds: 3, prepare: 10, finalRest: false };
+    const DEFAULT_ALERTS = { sound: "beep", volume: 80, workStart: true, restStart: true, finish: true, countdown: 3, finishSeconds: 5 };
+    const COUNTDOWN_CHOICES = [0, 1, 2, 3, 4, 5, 10];
+    const FINISH_CHOICES = [1, 2, 3, 5, 10, 15, 30];
+    // Notes are [frequency Hz, offset s, length s].
+    const SOUNDS = {
+      beep: {
+        label: "Beep", type: "sine",
+        tick: [[880, 0, .12]], work: [[1320, 0, .45]], rest: [[660, 0, .45]],
+        finish: { period: .5, notes: [[1320, 0, .18], [1320, .24, .18]] }
+      },
+      bell: {
+        label: "Bell", type: "sine", ring: true, partials: [[1, 1], [2.76, .35], [5.4, .15]],
+        tick: [[1046, 0, .45]], work: [[1568, 0, 1.4]], rest: [[784, 0, 1.4]],
+        finish: { period: 1, notes: [[1568, 0, 1], [1175, .5, 1]] }
+      },
+      chime: {
+        label: "Chime", type: "triangle", ring: true,
+        tick: [[1318, 0, .3]],
+        work: [[1046, 0, .5], [1318, .12, .5], [1568, .24, .8]],
+        rest: [[1568, 0, .5], [1318, .12, .5], [1046, .24, .8]],
+        finish: { period: 1.2, notes: [[1046, 0, .5], [1318, .15, .5], [1568, .3, .5], [2093, .45, .8]] }
+      },
+      whistle: {
+        label: "Whistle", type: "sine", trill: true,
+        tick: [[2600, 0, .1]], work: [[2400, 0, .22], [2400, .32, .6]], rest: [[2400, 0, .7]],
+        finish: { period: 1, notes: [[2400, 0, .7]] }
+      },
+      buzzer: {
+        label: "Buzzer", type: "sawtooth", peak: .16,
+        tick: [[220, 0, .1]], work: [[330, 0, .55]], rest: [[220, 0, .55]],
+        finish: { period: .8, notes: [[180, 0, .6]] }
+      },
+      digital: {
+        label: "Digital", type: "square", peak: .12,
+        tick: [[2000, 0, .06]],
+        work: [[2000, 0, .08], [2000, .12, .08], [2000, .24, .08]],
+        rest: [[1200, 0, .08], [1200, .12, .25]],
+        finish: { period: .5, notes: [[2000, 0, .08], [2000, .12, .08], [2000, .24, .08]] }
+      }
+    };
+    const makeState = () => ({ status: "idle", elapsed: 0, startedAt: 0, phaseKey: "", tickKey: "" });
     const states = { workout: makeState(), timer: makeState(), stopwatch: makeState() };
     let mode = "workout";
-    let workout = { work: 50, rest: 20, rounds: 3 };
+    let workout = { ...DEFAULT_PLAN };
+    let alerts = { ...DEFAULT_ALERTS };
     let duration = 300;
     let presets = [];
     let storageWritable = true;
     let muted = false;
     let audioContext = null;
+    let masterGain = null;
     let audioGeneration = 0;
     const voices = new Set();
     let wakeLock = null;
@@ -367,19 +670,37 @@
       const result = {
         work: integer(value.work, "Work duration", 1),
         rest: integer(value.rest, "Rest duration", 0),
-        rounds: integer(value.rounds, "Rounds", 1)
+        rounds: integer(value.rounds, "Rounds", 1),
+        prepare: integer(value.prepare, "Get ready duration", 0),
+        finalRest: value.finalRest === true
       };
-      validMilliseconds(workoutCycleSeconds(result) * result.rounds);
+      validMilliseconds(workoutSeconds(result));
       return result;
     }
 
-    function workoutCycleSeconds(config) {
-      return config.work + ALARM_SECONDS + config.rest;
+    function workoutSeconds(config) {
+      return config.prepare + (config.work + config.rest) * config.rounds - (config.finalRest ? 0 : config.rest);
+    }
+
+    function validateAlerts(value) {
+      if (!value || typeof value !== "object") throw new Error("Unrecognized alert settings.");
+      const result = { ...DEFAULT_ALERTS, ...value };
+      if (!Object.hasOwn(SOUNDS, result.sound)) throw new Error("Unknown alert sound.");
+      if (!Number.isInteger(result.volume) || result.volume < 0 || result.volume > 100) throw new Error("Invalid volume.");
+      if (!COUNTDOWN_CHOICES.includes(result.countdown)) throw new Error("Invalid countdown length.");
+      if (!FINISH_CHOICES.includes(result.finishSeconds)) throw new Error("Invalid finish alarm length.");
+      for (const key of ["workStart", "restStart", "finish"]) {
+        if (typeof result[key] !== "boolean") throw new Error("Invalid alert switch.");
+      }
+      return {
+        sound: result.sound, volume: result.volume, workStart: result.workStart, restStart: result.restStart,
+        finish: result.finish, countdown: result.countdown, finishSeconds: result.finishSeconds
+      };
     }
 
     function totalMilliseconds(currentMode) {
       if (currentMode === "stopwatch") return Infinity;
-      return currentMode === "timer" ? duration * 1000 : workoutCycleSeconds(workout) * workout.rounds * 1000;
+      return (currentMode === "timer" ? duration : workoutSeconds(workout)) * 1000;
     }
 
     function elapsedAt(state, now) {
@@ -387,19 +708,34 @@
     }
 
     function workoutAt(config, elapsed) {
+      const prepareMs = config.prepare * 1000;
       const workMs = config.work * 1000;
-      const alarmEnd = workMs + ALARM_SECONDS * 1000;
-      const cycleMs = workoutCycleSeconds(config) * 1000;
-      const total = cycleMs * config.rounds;
-      if (elapsed >= total) return { phase: "done", round: config.rounds, remaining: 0, key: "done" };
-      const roundIndex = Math.floor(elapsed / cycleMs);
-      const offset = elapsed - roundIndex * cycleMs;
-      const phase = offset < workMs ? "work" : offset < alarmEnd ? "alarm" : "rest";
+      const restMs = config.rest * 1000;
+      const cycleMs = workMs + restMs;
+      if (elapsed >= workoutSeconds(config) * 1000) {
+        return { phase: "done", round: config.rounds, remaining: 0, length: 1, key: "done" };
+      }
+      if (elapsed < prepareMs) {
+        return { phase: "prepare", round: 1, remaining: prepareMs - elapsed, length: prepareMs, key: "prepare" };
+      }
+      const offsetAll = elapsed - prepareMs;
+      const roundIndex = Math.min(Math.floor(offsetAll / cycleMs), config.rounds - 1);
+      const offset = offsetAll - roundIndex * cycleMs;
+      const phase = offset < workMs ? "work" : "rest";
       return {
         phase, round: roundIndex + 1,
-        remaining: (phase === "work" ? workMs : phase === "alarm" ? alarmEnd : cycleMs) - offset,
+        remaining: (phase === "work" ? workMs : cycleMs) - offset,
+        length: phase === "work" ? workMs : restMs,
         key: `${roundIndex}:${phase}`
       };
+    }
+
+    function nextStep(config, current) {
+      if (current.phase === "prepare") return `Work \u00b7 ${formatTime(config.work * 1000)}`;
+      const isLast = current.round === config.rounds;
+      if (current.phase === "work" && config.rest > 0 && (!isLast || config.finalRest)) return `Rest \u00b7 ${formatTime(config.rest * 1000)}`;
+      if (current.phase === "done" || isLast) return "Finish";
+      return `Round ${current.round + 1} \u00b7 ${formatTime(config.work * 1000)}`;
     }
 
     function formatTime(milliseconds, hundredths = false) {
@@ -414,7 +750,10 @@
     function readConfiguration() {
       try {
         if (mode === "workout") {
-          workout = validateWorkout({ work: $("work").value, rest: $("rest").value, rounds: $("rounds").value });
+          workout = validateWorkout({
+            work: $("work").value, rest: $("rest").value, rounds: $("rounds").value,
+            prepare: $("prepare").value, finalRest: $("final-rest").checked
+          });
         } else if (mode === "timer") {
           const next = integer($("duration").value, "Timer duration", 1);
           validMilliseconds(next);
@@ -428,11 +767,54 @@
       }
     }
 
+    function writeAlertsForm() {
+      $("alert-sound").value = alerts.sound;
+      $("volume").value = String(alerts.volume);
+      $("volume-value").textContent = `${alerts.volume}%`;
+      $("alert-work").checked = alerts.workStart;
+      $("alert-rest").checked = alerts.restStart;
+      $("alert-finish").checked = alerts.finish;
+      $("alert-countdown").value = String(alerts.countdown);
+      $("alert-finish-seconds").value = String(alerts.finishSeconds);
+    }
+
+    function loadAlerts() {
+      for (const [value, sound] of Object.entries(SOUNDS)) $("alert-sound").add(new Option(sound.label, value));
+      try {
+        const raw = localStorage.getItem(ALERTS_KEY);
+        if (raw !== null) alerts = validateAlerts(JSON.parse(raw));
+      } catch (error) {
+        alerts = { ...DEFAULT_ALERTS };
+        message("storage-message", `Saved alert settings could not be loaded: ${error.message} Using defaults.`);
+      }
+      writeAlertsForm();
+    }
+
+    function saveAlerts() {
+      alerts = validateAlerts({
+        sound: $("alert-sound").value,
+        volume: Number($("volume").value),
+        workStart: $("alert-work").checked,
+        restStart: $("alert-rest").checked,
+        finish: $("alert-finish").checked,
+        countdown: Number($("alert-countdown").value),
+        finishSeconds: Number($("alert-finish-seconds").value)
+      });
+      $("volume-value").textContent = `${alerts.volume}%`;
+      if (masterGain) masterGain.gain.value = alerts.volume / 100;
+      try {
+        localStorage.setItem(ALERTS_KEY, JSON.stringify(alerts));
+      } catch (error) {
+        message("storage-message", `Alert settings apply for this session but could not be saved: ${error.message}`);
+      }
+      render();
+    }
+
     function silence() {
       audioGeneration++;
       for (const voice of voices) {
-        voice.gain.disconnect();
-        voice.oscillator.stop();
+        voice.nodes.forEach((node) => node.disconnect());
+        voice.oscillators.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
       }
       voices.clear();
     }
@@ -444,44 +826,86 @@
         if (!audioContext) audioContext = new AudioContext();
         if (audioContext.state !== "running") await audioContext.resume();
         if (audioContext.state !== "running") throw new Error("The browser has blocked audio.");
+        if (!masterGain) {
+          masterGain = audioContext.createGain();
+          masterGain.connect(audioContext.destination);
+        }
+        masterGain.gain.value = alerts.volume / 100;
         message("audio-message");
         return true;
       } catch (error) {
-        message("audio-message", `Sound unavailable: ${error.message} Use sound preview to retry.`);
+        message("audio-message", `Sound unavailable: ${error.message} Use Test under Alerts & sound to retry.`);
         return false;
       }
     }
 
-    function tone(complete, seconds = ALARM_SECONDS) {
+    function playNote(profile, frequency, start, length) {
+      const output = audioContext.createGain();
+      const nodes = [output];
+      const oscillators = [];
+      for (const [ratio, level] of profile.partials || [[1, 1]]) {
+        const oscillator = audioContext.createOscillator();
+        const partialGain = audioContext.createGain();
+        oscillator.type = profile.type;
+        oscillator.frequency.value = frequency * ratio;
+        partialGain.gain.value = level;
+        oscillator.connect(partialGain);
+        partialGain.connect(output);
+        oscillators.push(oscillator);
+        nodes.push(partialGain);
+      }
+      if (profile.trill) {
+        const lfo = audioContext.createOscillator();
+        const depth = audioContext.createGain();
+        lfo.frequency.value = 28;
+        depth.gain.value = frequency * .04;
+        lfo.connect(depth);
+        oscillators.forEach((oscillator) => depth.connect(oscillator.frequency));
+        oscillators.push(lfo);
+        nodes.push(depth);
+      }
+      const peak = profile.peak ?? .35;
+      const attack = Math.min(.01, length / 4);
+      output.gain.setValueAtTime(0, start);
+      output.gain.linearRampToValueAtTime(peak, start + attack);
+      if (profile.ring) {
+        output.gain.exponentialRampToValueAtTime(.0001, start + length);
+      } else {
+        output.gain.setValueAtTime(peak, Math.max(start + attack, start + length - .03));
+        output.gain.linearRampToValueAtTime(0, start + length);
+      }
+      output.connect(masterGain);
+      const voice = { oscillators, nodes };
+      voices.add(voice);
+      oscillators[0].onended = () => {
+        nodes.forEach((node) => node.disconnect());
+        oscillators.forEach((oscillator) => oscillator.disconnect());
+        voices.delete(voice);
+      };
+      oscillators.forEach((oscillator) => { oscillator.start(start); oscillator.stop(start + length + .02); });
+    }
+
+    // kind: "tick" | "work" | "rest" | "finish"
+    function cue(kind) {
       if (muted) return;
-      if (!audioContext || audioContext.state !== "running") {
-        message("audio-message", "Sound is not active. Use sound preview in Help to enable it.");
+      if (!audioContext || audioContext.state !== "running" || !masterGain) {
+        message("audio-message", "Sound is not active. Use Test under Alerts & sound to enable it.");
         return;
       }
       silence();
-      const notes = complete ? [660, 880, 1100] : [740];
-      const noteDuration = complete ? .5 : .2;
-      const durationSeconds = complete ? seconds : noteDuration;
-      const noteCount = Math.ceil(durationSeconds / noteDuration);
-      const startedAt = audioContext.currentTime;
-      for (let index = 0; index < noteCount; index++) {
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        const start = startedAt + index * noteDuration;
-        const length = Math.min(noteDuration, durationSeconds - index * noteDuration);
-        oscillator.frequency.value = notes[index % notes.length];
-        gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(.18, start + Math.min(.015, length / 3));
-        gain.gain.exponentialRampToValueAtTime(.001, start + length * .9);
-        gain.gain.linearRampToValueAtTime(0, start + length);
-        oscillator.connect(gain);
-        gain.connect(audioContext.destination);
-        const voice = { oscillator, gain };
-        voices.add(voice);
-        oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); voices.delete(voice); };
-        oscillator.start(start);
-        oscillator.stop(start + length);
+      const profile = SOUNDS[alerts.sound];
+      const startedAt = audioContext.currentTime + .01;
+      let notes = profile[kind];
+      if (kind === "finish") {
+        const { period, notes: pattern } = profile.finish;
+        notes = [];
+        for (let offset = 0; offset < alerts.finishSeconds; offset += period) {
+          for (const [frequency, at, length] of pattern) {
+            if (offset + at < alerts.finishSeconds) notes.push([frequency, offset + at, Math.min(length, alerts.finishSeconds - offset - at)]);
+          }
+        }
       }
+      for (const [frequency, offset, length] of notes) playNote(profile, frequency, startedAt + offset, length);
     }
 
     async function syncWakeLock() {
@@ -519,28 +943,39 @@
       if (states[mode].status !== "running" || document.hidden) await syncWakeLock();
     }
 
+    function currentSegment(elapsed) {
+      if (mode === "workout") return workoutAt(workout, elapsed);
+      const total = totalMilliseconds("timer");
+      return { phase: "timer", key: "timer", remaining: total - elapsed, length: total, round: 1 };
+    }
+
     function reconcile(now) {
       const state = states[mode];
       if (state.status !== "running") return;
       const elapsed = elapsedAt(state, now);
-      if (elapsed >= totalMilliseconds(mode)) {
-        state.elapsed = totalMilliseconds(mode);
+      const total = totalMilliseconds(mode);
+      if (elapsed >= total) {
+        state.elapsed = total;
         state.status = "completed";
-        if (mode !== "workout" || workout.rest > 0 || state.phaseKey !== `${workout.rounds - 1}:alarm`) {
-          tone(true);
-        } else silence();
+        if (alerts.finish) cue("finish");
         $("announcement").textContent = `${mode === "workout" ? "Workout" : "Timer"} complete.`;
         void syncWakeLock();
-      } else if (mode === "workout") {
-        const current = workoutAt(workout, elapsed);
-        if (current.key !== state.phaseKey) {
-          state.phaseKey = current.key;
-          if (current.phase === "alarm") tone(true, current.remaining / 1000);
-          else if (current.phase === "work") tone(false);
-          else silence();
-          const label = current.phase === "alarm" ? "Work complete. Five-second alarm" : current.phase === "work" ? "Work" : "Rest";
-          $("announcement").textContent = `${label}, round ${current.round} of ${workout.rounds}.`;
-        }
+        return;
+      }
+      if (mode === "stopwatch") return;
+      const current = currentSegment(elapsed);
+      const second = Math.ceil(current.remaining / 1000);
+      const tickKey = `${current.key}:${second}`;
+      if (current.key !== state.phaseKey) {
+        state.phaseKey = current.key;
+        state.tickKey = tickKey;
+        if (current.phase === "work" && alerts.workStart) cue("work");
+        else if (current.phase === "rest" && alerts.restStart) cue("rest");
+        const label = current.phase === "work" ? "Work" : "Rest";
+        $("announcement").textContent = `${label}, round ${current.round} of ${workout.rounds}.`;
+      } else if (second <= alerts.countdown && tickKey !== state.tickKey) {
+        state.tickKey = tickKey;
+        cue("tick");
       }
     }
 
@@ -555,47 +990,92 @@
       void syncWakeLock();
     }
 
+    function setRing(visible) {
+      const ring = $("ring-value");
+      const clamped = Math.min(1, Math.max(0, visible));
+      ring.style.strokeDashoffset = String(1 - clamped);
+      ring.style.opacity = clamped < .002 ? "0" : "1";
+    }
+
     function render(now = performance.now()) {
       const state = states[mode];
       const elapsed = elapsedAt(state, now);
       const total = totalMilliseconds(mode);
       const locked = state.status !== "idle";
-      let phase = "";
-      let subtext = "";
-      let displayed = mode === "stopwatch" ? elapsed : Math.max(0, total - elapsed);
+      let phase;
+      let displayed;
       if (mode === "workout") {
         const current = workoutAt(workout, elapsed);
         displayed = current.remaining;
-        phase = { done: "Workout complete", work: "Work", alarm: "Work complete \u00b7 Alarm", rest: "Rest" }[current.phase];
-        if (state.status === "idle") phase = "Ready to work";
-        subtext = `Round ${current.round} of ${workout.rounds} \u00b7 ${formatTime(Math.max(0, total - elapsed))} ${state.status === "idle" ? "total" : "left"}`;
+        phase = { done: "Complete", prepare: "Get ready", work: "Work", rest: "Rest" }[current.phase];
+        if (state.status === "idle") phase = "Ready";
+        $("round").textContent = current.phase === "done"
+          ? `All ${workout.rounds} rounds done`
+          : `Round ${current.round} of ${workout.rounds}`;
+        $("next").textContent = current.phase === "done" ? "Nice work!" : `Next: ${nextStep(workout, current)}`;
+        $("total").textContent = `${formatTime(Math.max(0, total - elapsed))} ${state.status === "idle" ? "total" : "left"}`;
+        $("progress").value = Math.min(1, elapsed / total);
+        setRing(current.phase === "done" ? 0 : current.remaining / current.length);
         document.body.dataset.phase = current.phase;
+      } else if (mode === "timer") {
+        displayed = Math.max(0, total - elapsed);
+        phase = state.status === "completed" ? "Time is up" : "Countdown";
+        setRing(displayed / total);
+        document.body.dataset.phase = "";
       } else {
-        phase = mode === "timer" ? "Countdown" : "Stopwatch";
-        if (state.status === "completed") phase = "Time is up";
-        subtext = mode === "stopwatch" ? "A little progress, every second." : "One thing at a time.";
+        displayed = elapsed;
+        phase = "Stopwatch";
+        setRing((elapsed % 60000) / 60000);
         document.body.dataset.phase = "";
       }
       if (state.status === "paused") phase += " \u00b7 Paused";
+      document.body.dataset.status = state.status;
       $("phase").textContent = phase;
       const timeText = formatTime(displayed, mode === "stopwatch");
       $("display").textContent = timeText;
+      $("display").classList.toggle("medium", timeText.length > 5 && timeText.length <= 8);
       $("display").classList.toggle("long", timeText.length > 8);
       $("display").setAttribute("aria-label", mode === "stopwatch" ? "Elapsed time" : "Remaining time");
-      $("subtext").textContent = subtext;
-      $("progress").hidden = mode === "stopwatch";
-      $("progress").value = mode === "stopwatch" ? 0 : Math.min(1, elapsed / total);
+      $("round").hidden = mode !== "workout";
+      $("meta").hidden = mode !== "workout";
+      $("tagline").hidden = mode === "workout";
+      $("tagline").textContent = mode === "stopwatch" ? "A little progress, every second." : "One thing at a time.";
       $("workout-fields").disabled = states.workout.status !== "idle";
       $("duration").disabled = states.timer.status !== "idle";
       $("shortcuts").hidden = mode !== "timer" || locked;
       $("workout-settings").hidden = mode !== "workout";
       $("countdown-settings").hidden = mode !== "timer";
+      $("alert-settings").hidden = mode === "stopwatch";
+      $("chips").hidden = mode === "stopwatch";
+      $("settings-button").hidden = mode === "stopwatch";
+      $("tab-plan").textContent = mode === "timer" ? "Timer" : "Workout plan";
+      document.querySelectorAll(".workout-only").forEach((element) => { element.hidden = mode !== "workout"; });
+      $("plan-summary").textContent = mode === "timer"
+        ? `${formatTime(duration * 1000)} timer`
+        : `${workout.rounds} \u00d7 ${formatTime(workout.work * 1000)} / ${formatTime(workout.rest * 1000)}`;
+      $("alert-summary").textContent = muted ? "Muted" : `${SOUNDS[alerts.sound].label} \u00b7 ${alerts.volume}%`;
       $("load-preset").disabled = states.workout.status !== "idle" || $("preset-select").value === "";
       $("delete-preset").disabled = !storageWritable || $("preset-select").value === "";
       $("save-preset").disabled = !storageWritable || states.workout.status !== "idle";
       $("primary").textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Resume" : state.status === "completed" ? "Start again" : `Start ${mode}`;
       $("mode-title").textContent = { workout: "Make time for movement", timer: "A moment of focus", stopwatch: "Every second counts" }[mode];
       document.title = `${timeText} - ${mode === "workout" ? "Workout" : mode === "timer" ? "Timer" : "Stopwatch"}`;
+    }
+
+    function selectTab(tab) {
+      document.querySelectorAll("[data-tab]").forEach((button) => {
+        const selected = button.dataset.tab === tab;
+        button.setAttribute("aria-selected", String(selected));
+        button.tabIndex = selected ? 0 : -1;
+      });
+      $("panel-plan").hidden = tab !== "plan";
+      $("panel-alerts").hidden = tab !== "alerts";
+    }
+
+    function openSettings(tab) {
+      if (mode === "stopwatch") return;
+      if (tab) selectTab(tab);
+      if (!$("settings").open) $("settings").showModal();
     }
 
     function reset() {
@@ -626,8 +1106,10 @@
               throw new Error("A preset has an invalid or duplicate name.");
             }
             if (["work", "rest", "rounds"].some((key) => typeof preset[key] !== "number")) throw new Error("A preset has invalid durations.");
+            if (preset.prepare !== undefined && typeof preset.prepare !== "number") throw new Error("A preset has an invalid get-ready time.");
+            if (preset.finalRest !== undefined && typeof preset.finalRest !== "boolean") throw new Error("A preset has an invalid final-rest setting.");
             names.add(preset.name);
-            return { name: preset.name, ...validateWorkout(preset) };
+            return { name: preset.name, ...validateWorkout({ ...DEFAULT_PLAN, ...preset }) };
           });
         }
       } catch (error) {
@@ -665,20 +1147,24 @@
         pause(now);
       } else {
         if (state.status === "completed") reset();
-        if (states[mode].status === "idle" && !readConfiguration()) return;
+        if (states[mode].status === "idle" && !readConfiguration()) { openSettings("plan"); return; }
         silence();
         const generation = audioGeneration;
         const next = states[mode];
+        const freshStart = next.elapsed === 0;
         next.startedAt = now;
         next.status = "running";
-        if (mode === "workout") {
-          next.phaseKey = workoutAt(workout, next.elapsed).key;
-          $("workout-settings").open = false;
+        if (mode !== "stopwatch") {
+          const current = currentSegment(next.elapsed);
+          if (freshStart || !next.phaseKey) {
+            next.phaseKey = current.key;
+            next.tickKey = `${current.key}:${Math.ceil(current.remaining / 1000)}`;
+          }
         }
         void prepareAudio().then((ready) => {
-          if (!ready || generation !== audioGeneration || mode !== "workout" || states.workout !== next || next.status !== "running") return;
+          if (!ready || !freshStart || generation !== audioGeneration || mode !== "workout" || states.workout !== next || next.status !== "running") return;
           const current = workoutAt(workout, elapsedAt(next, performance.now()));
-          if (current.phase === "alarm") tone(true, current.remaining / 1000);
+          if (current.key === "0:work" && next.phaseKey === "0:work" && alerts.workStart) cue("work");
         });
         $("announcement").textContent = `${mode} started.`;
         void syncWakeLock();
@@ -698,15 +1184,30 @@
         render();
       });
     });
-    ["work", "rest", "rounds", "duration"].forEach((id) => {
+    ["work", "rest", "rounds", "prepare", "duration"].forEach((id) => {
       $(id).addEventListener("input", () => { readConfiguration(); render(); });
+    });
+    $("final-rest").addEventListener("change", () => { readConfiguration(); render(); });
+    ["alert-sound", "alert-work", "alert-rest", "alert-finish", "alert-countdown", "alert-finish-seconds"].forEach((id) => {
+      $(id).addEventListener("change", saveAlerts);
+    });
+    $("volume").addEventListener("input", saveAlerts);
+    $("alert-sound").addEventListener("change", async () => {
+      silence();
+      const generation = audioGeneration;
+      if (await prepareAudio() && generation === audioGeneration) cue("work");
+    });
+    $("test-sound").addEventListener("click", async () => {
+      silence();
+      const generation = audioGeneration;
+      if (await prepareAudio() && generation === audioGeneration) cue("work");
     });
     document.querySelectorAll("[data-add]").forEach((button) => {
       button.addEventListener("click", () => {
-        if (!readConfiguration()) return;
+        if (!readConfiguration()) { openSettings("plan"); return; }
         const next = duration + Number(button.dataset.add);
         try { validMilliseconds(next); }
-        catch (error) { message("input-message", error.message); return; }
+        catch (error) { message("input-message", error.message); openSettings("plan"); return; }
         $("duration").value = String(next);
         readConfiguration();
         render();
@@ -721,13 +1222,15 @@
       $("sound-waves").toggleAttribute("hidden", muted);
       $("sound-cross").toggleAttribute("hidden", !muted);
       $("preview").disabled = muted;
+      $("test-sound").disabled = muted;
       if (muted) message("audio-message");
       else void prepareAudio();
+      render();
     });
     $("preview").addEventListener("click", async () => {
       silence();
       const generation = audioGeneration;
-      if (await prepareAudio() && generation === audioGeneration) tone(true);
+      if (await prepareAudio() && generation === audioGeneration) cue("finish");
     });
     $("fullscreen").addEventListener("click", async () => {
       try {
@@ -744,6 +1247,25 @@
       $("fullscreen").title = active ? "Exit full screen" : "Enter full screen";
     });
     $("help").addEventListener("click", () => $("help-dialog").showModal());
+    $("settings-button").addEventListener("click", () => openSettings());
+    document.querySelectorAll("[data-open-tab]").forEach((button) => {
+      button.addEventListener("click", () => openSettings(button.dataset.openTab));
+    });
+    document.querySelectorAll("[data-tab]").forEach((tab) => {
+      tab.addEventListener("click", () => selectTab(tab.dataset.tab));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const next = event.key === "Home" ? "plan" : event.key === "End" ? "alerts" : tab.dataset.tab === "plan" ? "alerts" : "plan";
+        selectTab(next);
+        $(`tab-${next}`).focus();
+      });
+    });
+    $("close-settings").addEventListener("click", () => $("settings").close());
+    $("done-settings").addEventListener("click", () => $("settings").close());
+    $("settings").addEventListener("click", (event) => {
+      if (event.target === $("settings")) $("settings").close();
+    });
     $("close-help").addEventListener("click", () => $("help-dialog").close());
     $("help-dialog").addEventListener("close", silence);
     $("preset-select").addEventListener("change", () => render());
@@ -773,6 +1295,8 @@
       $("work").value = String(preset.work);
       $("rest").value = String(preset.rest);
       $("rounds").value = String(preset.rounds);
+      $("prepare").value = String(preset.prepare);
+      $("final-rest").checked = preset.finalRest;
       $("preset-name").value = preset.name;
       readConfiguration();
       $("preset-status").textContent = `Loaded "${preset.name}".`;
@@ -794,6 +1318,8 @@
       void syncWakeLock();
     });
     loadTheme();
+    loadAlerts();
+    readConfiguration();
     loadStorage();
     setInterval(() => {
       const now = performance.now();
