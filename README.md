@@ -4,7 +4,7 @@ Hi! I'm **Prateek Behera**, a passionate 7th-grade student at **Phoenix Greens S
 
 **Live site:** [https://prateekbehera14.github.io/blog](https://prateekbehera14.github.io/blog)
 
-## 🌟 Features
+## 🌟 Classic Site Features (`classic.html`)
 
 - **Microsoft-Inspired Design**: Professional dark navy hero section with polished blue-gray theme
 - **Rounded Card Design**: Modern cards with 12px border-radius and elegant shadows
@@ -45,7 +45,25 @@ Hi! I'm **Prateek Behera**, a passionate 7th-grade student at **Phoenix Greens S
 
 ## 🚀 Getting Started
 
-Simply open `index.html` in your web browser to view the blog.
+Simply open `index.html` (the Field Notebook site) in your web browser to view the blog. The previous design is kept at `classic.html`.
+
+## 📓 Field Notebook edition (`index.html`)
+
+A reimagined version of the site styled as a hand-kept notebook: ruled paper, sticky notes, an explorer ID card, a filterable **trophy shelf**, and a timeline journal.
+
+Each achievement has its own **photo gallery** (polaroid stack → lightbox with arrows, keyboard ←/→, swipe, and thumbnails).
+
+**Adding photos:** put images in `images/achievements/<id>/` and list them in the `ACHIEVEMENTS` array near the bottom of `index.html`:
+
+```js
+{ id: "hyderabad-5k", ..., photos: [
+  { src: "finish.jpg", caption: "Crossed the finish!" }
+]}
+```
+
+Missing photos show a placeholder that tells you the exact path to add. Full URLs (`https://...`) or paths containing `/` (e.g. `images/fundraising-certificate.png`) are used as-is in `src`.
+
+Keep photos under ~1600px on the long side (≈300 KB) so the page loads fast on phones. `images/prateek-profile.jpeg` is the Explorer ID photo, and `images/og-preview.jpg` (1200×630) is the preview shown when the link is shared.
 
 ## 📧 Contact
 
