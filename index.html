@@ -443,7 +443,7 @@
       <span class="page-label" aria-hidden="true">p. 03 — trophy shelf</span>
       <p class="chapter">Chapter two</p>
       <h2 class="page-title">The trophy shelf.</h2>
-      <p class="page-intro">Every medal has a story — and a few photos. <span class="scribble">tap a photo stack to flip through! →</span></p>
+      <p class="page-intro">Every medal has a story — and a few photos. Newest first. <span class="scribble">tap a photo stack to flip through! →</span></p>
 
       <div class="shelf-tools" role="group" aria-label="Filter achievements">
         <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
@@ -507,7 +507,7 @@
             <h3>🎒 My Campaign Hit 129%!</h3>
             <p>I learned that many students in government schools across Telangana walk to school barefoot and sit on the floor all day. So I ran a campaign on Fuel A Dream with Greensole Foundation to fund back-to-school kits — recycled footwear, a study mat and a school bag for ₹950 each. Thanks to 9 kind funders, we raised ₹24,450 against a ₹19,000 goal!</p>
             <div class="post-tags"><span>SocialImpact</span><span>Fundraising</span><span>Greensole</span></div>
-            <a class="post-link" href="#trophies" onclick="openGallery(0,0);return false;">See the photos →</a>
+            <a class="post-link" href="#trophies" onclick="openGallery(ACHIEVEMENTS.findIndex(a => a.id === 'fundraising-school-kits'),0);return false;">See the photos →</a>
           </div>
         </article>
         <article class="post reveal">
@@ -598,10 +598,13 @@
       Achievement photo galleries.
       Put photos in: images/achievements/<id>/  and list them in "photos" below.
       Any photo that is missing shows a friendly placeholder until you add it.
+      sortDate uses YYYY-MM-DD, YYYY-MM, or YYYY at the known precision.
+      Undated school awards use the end year of their latest academic year.
     */
     const ACHIEVEMENTS = [
       {
         id: "fundraising-school-kits", icon: "🎒", type: "social", label: "Social impact", when: "17 Jun – 12 Jul 2026",
+        sortDate: "2026-07-12",
         title: "Raised ₹24,450 for back-to-school kits for government-school students in Telangana",
         note: "129% of my ₹19,000 goal, from 9 funders! Each ₹950 kit has recycled footwear, a study mat & a school bag.",
         photos: [
@@ -611,6 +614,7 @@
       },
       {
         id: "nso-grade-6", icon: "🥇", type: "gold", label: "Gold medal", when: "Grade 6",
+        sortDate: "2026-01",
         title: "SOF National Science Olympiad — Gold Medal of Excellence",
         note: "Science is just organised curiosity!",
         photos: [
@@ -620,6 +624,7 @@
       },
       {
         id: "imo-grade-6", icon: "🥇", type: "gold", label: "Gold medal", when: "Grade 6",
+        sortDate: "2026-01",
         title: "SOF International Mathematics Olympiad — Gold Medal of Excellence",
         note: "Numbers never get boring.",
         photos: [
@@ -629,6 +634,7 @@
       },
       {
         id: "nso-grade-5", icon: "🥇", type: "gold", label: "Gold medal", when: "Grade 5",
+        sortDate: "2025-01",
         title: "SOF National Science Olympiad — Gold Medal of Excellence",
         note: "Where the streak started.",
         photos: [
@@ -637,6 +643,7 @@
       },
       {
         id: "imo-grade-5", icon: "🥇", type: "gold", label: "Gold medal", when: "Grade 5",
+        sortDate: "2025-01",
         title: "SOF International Mathematics Olympiad — Gold Medal of Excellence",
         note: "First maths gold!",
         photos: [
@@ -645,6 +652,7 @@
       },
       {
         id: "ei-asset", icon: "⭐", type: "cert", label: "Excellence", when: "Grades 3, 5 & 6",
+        sortDate: "2026",
         title: "Ei ASSET Talent Search Certificate for Outstanding Academic Performance",
         note: "Three times and counting.",
         photos: [
@@ -655,6 +663,7 @@
       },
       {
         id: "tges-english", icon: "📜", type: "cert", label: "Recognition", when: "Grade 5",
+        sortDate: "2025",
         title: "Certificate of Special Recognition in English from TGES",
         note: "Words matter too.",
         photos: [
@@ -663,6 +672,7 @@
       },
       {
         id: "inter-school-maths", icon: "🎯", type: "comp", label: "Competition", when: "Grade 5",
+        sortDate: "2025",
         title: "Represented Global Edge School in an Inter-School Mathematics Competition",
         note: "Representing my school felt huge.",
         photos: [
@@ -671,6 +681,7 @@
       },
       {
         id: "hyderabad-5k", icon: "🏃", type: "sport", label: "Sports", when: "2025",
+        sortDate: "2025-08-23",
         title: "Completed the 5K Run at the Hyderabad Marathon",
         note: "Legs tired. Heart full.",
         photos: [
@@ -679,8 +690,22 @@
           { src: "images/2025-5k-run-pic3.jpeg", caption: "Finisher medal in hand at the NMDC stand" },
           { src: "images/2025-5k-run-bib-medal.jpeg", caption: "5 KM finisher medal & race bib — NMDC Hyderabad Marathon, 23 August 2025" }
         ]
+      },
+      {
+        id: "microsoft-ride-to-make-a-difference", icon: "🚴", type: "sport", label: "Cycling participation", when: "24 Oct 2026",
+        sortDate: "2026-10-24",
+        title: "Participated in Ride to Make a Difference at Microsoft Campus, Hyderabad",
+        note: "Microsoft Give Campaign — a ride with my father, a medal & a bicycle donation.",
+        photos: [
+          { src: "images/cycling/posing-for-photo-infront-of-legendary-microsoft-logo-at-building4.jpeg", caption: "A cycling memory in front of the Microsoft logo at Building 4" },
+          { src: "images/cycling/recieving-medals-from-rajeev-head-of-microsoft-india-along-side-my-father.jpeg", caption: "Celebrating our participation medals with my father at Microsoft Campus" },
+          { src: "images/cycling/ride-bib-and-medal.jpeg", caption: "My participation medal & bib 090 — Ride to Make a Difference, Microsoft Give 2026" },
+          { src: "images/cycling/donating-cycle-to-microsoft-security-personal.jpeg", caption: "Donating a bicycle to a member of the Microsoft security team" },
+          { src: "images/cycling/featured-in-microsoft-ride-to-make-difference-campaign-poster.jpeg", caption: "Featured in the Ride to Make a Difference campaign poster — fourth edition, 24 October, Microsoft Campus Building 3" }
+        ]
       }
     ];
+    ACHIEVEMENTS.sort((a, b) => b.sortDate.localeCompare(a.sortDate));
 
     const PALETTE = ["#ffd6a5", "#caffbf", "#9bf6ff", "#ffc6ff", "#fdffb6", "#bdb2ff"];
 
